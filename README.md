@@ -21,7 +21,10 @@ UMC Web Study 과제를 업로드하기 위한 Git 사용 방법입니다.
 UMC_10th_Study
 └ jeong
     └ week1
-        └ mission 파일
+        └ mission 1
+        └ mission 2
+        └ mission 2
+
 ```
 
 ※ main 브랜치 병합 시 코드 충돌 방지를 위해 개인 폴더 안에서 작업합니다.
@@ -123,7 +126,7 @@ git commit -m "커밋 메시지"
 예시
 
 ```bash
-git commit -m "FEAT: 1주차 미션 구현"
+git commit -m "FEAT: 1주차 mission 1 구현"
 ```
 
 ---
@@ -167,13 +170,13 @@ GitHub에서 **Compare & Pull Request** 버튼을 클릭합니다.
 ### Title
 
 ```
-N주차미션_닉네임
+[닉네임/이름] n주차 미션 제출
 ```
 
 예시
 
 ```
-1주차미션_jeong
+[jeong/이름] 1주차 미션 제출
 ```
 
 ### Description
