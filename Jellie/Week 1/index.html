@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeScript ToDo List</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="todo-app">
+    <section class="todo-card">
+      <h1 class="todo-card__title">To-Do List</h1>
+
+      <div class="todo-card__input-box">
+        <input
+          type="text"
+          id="todoInput"
+          class="todo-card__input"
+          placeholder="할 일 입력"
+        />
+        <button id="addButton" class="todo-card__add-button">할 일 추가</button>
+      </div>
+
+      <section class="todo-board">
+        <div class="todo-board__section">
+          <h2 class="todo-board__title">할 일</h2>
+          <ul id="todoList" class="todo-board__list"></ul>
+        </div>
+
+        <div class="todo-board__section">
+          <h2 class="todo-board__title">완료</h2>
+          <ul id="doneList" class="todo-board__list"></ul>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="./dist/main.js"></script>
+</body>
+</html>
