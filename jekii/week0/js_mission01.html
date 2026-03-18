@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS mission01 Todo</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #f8faff;
+        font-family: sans-serif;
+        color: #333;
+      }
+
+      .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 60px 0px 10px;
+      }
+
+      .header__title {
+        font-size: 2.2rem;
+        font-weight: 800;
+      }
+
+      .header__hr {
+        border: none;
+        border-top: 2px solid #e0e0e0;
+        width: 90%;
+        max-width: 800px;
+        margin-top: 50px;
+      }
+
+      .todo-form {
+        display: flex;
+        justify-content: center;
+        margin: 30px 0;
+      }
+
+      .todo-form__input {
+        width: 100%;
+        max-width: 600px;
+        height: 55px;
+        padding: 0 25px;
+        border: 1px solid lightsteelblue;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        outline: none;
+      }
+
+      .dashboard {
+        display: flex;
+        justify-content: center;
+        gap: 70px;
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 0 100px;
+      }
+
+      .todo-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin: 0px 20px;
+      }
+
+      .todo-section__title {
+        text-align: center;
+        font-size: 1.4rem;
+        margin-bottom: 40px;
+        padding-bottom: 10px;
+        display: inline-block;
+        align-self: center;
+        border-bottom: 3px solid #d1e2ff;
+      }
+
+      .todo-section__list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #d1e2ff;
+      }
+
+      .item__text {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .item__button {
+        padding: 4px 8px;
+        border: 1px solid #adc6ff;
+        border-radius: 10px;
+        background-color: #d1e2ff;
+        font-size: 0.8rem;
+        cursor: pointer;
+        color: #333;
+      }
+
+      .item__button:hover {
+        background-color: #bed2ff;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1 class="header__title">UMC Study Plan</h1>
+        <hr class="header__hr" />
+      </header>
+
+      <section class="todo-form">
+        <input
+          id="todoInput"
+          class="todo-form__input"
+          type="text"
+          placeholder="계획을 작성해보세요!"
+        />
+      </section>
+
+      <div class="dashboard">
+        <section class="todo-section">
+          <h2 class="todo-section__title">해야 할 일</h2>
+          <ul class="todo-section__list" id="todoList"></ul>
+        </section>
+
+        <section class="todo-section">
+          <h2 class="todo-section__title">해낸 일</h2>
+          <ul class="todo-section__list" id="doneList"></ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const input = document.getElementById("todoInput");
+      const todoList = document.getElementById("todoList");
+      const doneList = document.getElementById("doneList");
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && input.value.trim() !== "") {
+          addTodo(input.value);
+          input.value = "";
+        }
+      });
+      function createItem(text, buttonLabel) {
+        const item = document.createElement("li");
+        item.className = "item";
+
+        const itemText = document.createElement("span");
+        itemText.className = "item__text";
+        itemText.textContent = text;
+
+        const itemButton = document.createElement("button");
+        itemButton.className = "item__button";
+        itemButton.textContent = buttonLabel;
+
+        item.appendChild(itemText);
+        item.appendChild(itemButton);
+
+        return { item, itemButton };
+      }
+
+      function addTodo(text) {
+        const { item, itemButton } = createItem(text, "완료");
+        itemButton.onclick = () => completeTodo(item);
+        todoList.appendChild(item);
+      }
+
+      function completeTodo(item) {
+        const button = item.querySelector(".item__button");
+        button.textContent = "삭제";
+        button.onclick = () => deleteTodo(item);
+        doneList.appendChild(item);
+      }
+
+      function deleteTodo(item) {
+        item.remove();
+      }
+    </script>
+  </body>
+</html>
