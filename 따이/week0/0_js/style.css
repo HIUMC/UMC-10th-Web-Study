@@ -1,0 +1,113 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #eaecf0;
+}
+
+/* Page */
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  height: 100vh;
+}
+
+/* Header - page 안에서의 위치 */
+.page__header {
+  margin-bottom: 40px;
+}
+
+/* study-header 블록 - header 내부 구조 */
+.study-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.study-header__title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  padding: 80px 0px;
+}
+
+.study-header__divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #c0c4cc;
+}
+
+/* Main */
+.page__main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 30px 80px;
+}
+
+.page__input {
+  grid-column: 1 / 3;
+  width: 80%;
+  padding: 18px 20px;
+  font-size: 1rem;
+  border: 1.5px solid #c0c4cc;
+  border-top: #333 solid 1px;
+  border-left: #333 solid 1px;
+  background-color: #fff;
+  color: #333;
+  outline: none;
+  margin: 0 auto;
+}
+
+.page__input::placeholder {
+  color: #b0b5bf;
+}
+
+/* Plan List */
+.plan-list__title {
+  font-size: 1rem;
+  font-weight: bold;
+  padding-bottom: 5px;
+  margin: 0 auto 30px;
+  border-bottom: 2px solid #6e6f72;
+  width: fit-content;
+}
+
+.plan-list__items {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Plan Item */
+.plan-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 2px solid #c0c4cc;
+  margin: 0 120px;
+}
+
+.plan-item__text {
+  font-size: 1.1rem;
+  font-weight: 1000;
+}
+
+.plan-item__btn {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  background-color: #dde1ea;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.plan-item__btn:hover {
+  background-color: #c8cdd8;
+}
