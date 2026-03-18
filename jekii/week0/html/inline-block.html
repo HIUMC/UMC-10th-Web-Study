@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      div {
+        padding: 20px;
+        border: 2px dashed #ccc;
+        margin: 20px;
+      }
+      span,
+      b,
+      i {
+        padding: 10px;
+        border: 1px solid #000;
+      }
+
+      hr {
+        margin-top: 50px;
+        margin-bottom: 20px;
+      }
+
+      /* 1. Block: 무조건 한 줄 차지 */
+      .block-box {
+        display: block;
+        width: 200px;
+        height: 50px;
+        background-color: #c8e6c9;
+      }
+
+      /* 2. Inline: 크기 무시, 나란히 배치 */
+      .inline-box {
+        display: inline;
+        width: 500px; /*inline에서는 width,height 무시*/
+        height: 500px;
+        background-color: #c8e6c0;
+        margin: 30px;
+      }
+
+      /* 3. Inline-block: 크기 적용 + 나란히 배치 */
+      .ib-box {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        background-color: #c8e6c9;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>1. Display: Block</h2>
+    <div class="block-box">Block 1</div>
+    <div class="block-box">Block 2</div>
+
+    <hr />
+
+    <h2>2. Display: Inline</h2>
+    <span class="inline-box">Inline 1 (width 500px 무시됨)</span>
+    <span class="inline-box">Inline 2</span>
+
+    <hr />
+
+    <h2>3. Display: Inline-block</h2>
+    <div class="ib-box">IB 1</div>
+    <div class="ib-box">IB 2</div>
+    <div class="ib-box">IB 3</div>
+  </body>
+</html>

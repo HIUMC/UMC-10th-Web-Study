@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mission02</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        color: white;
+        font-size: 25px;
+      }
+
+      .layout {
+        width: 672px;
+        height: 770px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        text-align: center;
+      }
+
+      .header {
+        width: inherit;
+        height: 77px;
+        display: flex;
+      }
+
+      .header__header {
+        width: 25%;
+        background-color: #101628;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .header__menu {
+        width: 75%;
+        background-color: #ef3d4e;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .hero {
+        width: inherit;
+        height: 35%;
+        background-color: #4d86c7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        width: inherit;
+        height: 310px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        grid-template-areas: main none side-container;
+      }
+
+      .main {
+        background-color: #24344c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .side-container {
+        display: flex;
+        flex-direction: column;
+        grid-column: 3 / 4;
+      }
+      .image {
+        background-color: #c0e4e6;
+        height: 50%;
+        color: #131627;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .extra {
+        background-color: #4ebd97;
+        height: 50%;
+        color: #131627;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .footer__banner {
+        background-color: #ffd168;
+        height: 99px;
+        color: #131627;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <header class="header">
+        <div class="header__header">HEADER</div>
+        <div class="header__menu">MENU</div>
+      </header>
+
+      <section class="hero">HERO</section>
+
+      <div class="content">
+        <section class="main">MAIN</section>
+        <aside class="side-container">
+          <div class="image">IMAGE</div>
+          <div class="extra">EXTRA</div>
+        </aside>
+      </div>
+      <footer class="footer__banner">BANNER</footer>
+    </div>
+  </body>
+</html>
