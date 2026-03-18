@@ -1,0 +1,115 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f8f5ef;
+  font-family: Arial, sans-serif;
+}
+
+.site-header {
+  width: 75%;
+  max-width: 1000px;
+  margin: 16px auto;
+  padding: 14px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #f4f4f4;
+  border: 3px solid #2f2f2f;
+  border-radius: 28px;
+
+  box-shadow: 8px 8px 0 #2f2f2f;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 18px;
+  font-weight: 700;
+  color: #2f2f2f;
+}
+
+.logo img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.nav-menu{
+  display:flex;
+  gap:24px;
+  margin-left:auto;
+  margin-right: 20px;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #666;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.nav-menu a.active{
+  color: #ff6b3d;
+}
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 4px 8px;
+  border: 2px solid #2f2f2f;
+  border-radius: 999px;
+  background-color: #fff;
+}
+
+.lang-label {
+  font-size: 10px;
+  color: #888;
+  margin-right: 2px;
+}
+
+.lang-btn {
+  border: 1.5px solid #999;
+  background-color: #fff;
+  color: #666;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lang-btn.active {
+  background-color: #ff6b3d;
+  color: white;
+  border-color: #ff6b3d;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+/* 기본 (PC에서는 보이게) */
+.nav-menu {
+  display: flex;
+  gap: 20px;
+}
+
+/* 🔥 반응형 (화면 작아지면 숨김) */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+}
