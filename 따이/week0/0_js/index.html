@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>UMC Study Plan</title>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page__header study-header">
+        <h1 class="study-header__title">UMC Study Plan</h1>
+        <hr class="study-header__divider" />
+      </header>
+
+      <main class="page__main">
+        <input
+          class="page__input"
+          type="text"
+          placeholder="스터디 계획을 작성해보세요!"
+        />
+
+        <section class="plan-list">
+          <div class="plan-list__title">해야 할 일</div>
+          <ul class="plan-list__items" id="todo-list"></ul>
+        </section>
+
+        <section class="plan-list">
+          <div class="plan-list__title">해낸 일</div>
+          <ul class="plan-list__items" id="done-list"></ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
