@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: sans-serif; font-weight: bold; color: white; font-size: 2rem; }
+
+    .box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .top-row {
+      display: flex;
+      height: 120px;
+    }
+    .header { background-color: #1a2233; width: 250px; }
+    .menu { background-color: #f44336; flex-grow: 1; }
+
+    .hero {
+      background-color: #5386c1;
+      height: 350px;
+    }
+
+    .mid-section {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr; 
+      height: 400px;
+    }
+    .main { background-color: #28354f; }
+
+    .side-stack {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+    }
+    .image { background-color: #c4e5e8; color: #222; }
+    .extra { background-color: #55bc93; }
+
+    .banner {
+      background-color: #f9d26a;
+      height: 100px;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="top-row">
+      <div class="box header">HEADER</div>
+      <div class="box menu">MENU</div>
+    </div>
+
+    <div class="box hero">HERO</div>
+
+    <div class="mid-section">
+      <div class="box main">MAIN</div>
+      <div></div>
+      <div class="side-stack">
+        <div class="box image">IMAGE</div>
+        <div class="box extra">EXTRA</div>
+      </div>
+    </div>
+
+    <div class="box banner">BANNER</div>
+  </div>
+
+</body>
+</html>
