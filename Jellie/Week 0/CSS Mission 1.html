@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Mission 1</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      background:#f3f1ee;
+      font-family:Arial, sans-serif;
+      padding:60px 40px;
+    }
+
+    .navbar{
+      width:100%;
+      max-width:2000px;
+      margin:0 auto;
+      background:#ffffff;
+      border:3px solid #000000;
+      border-radius:50px;
+      box-shadow:10px 10px 0px #000000;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:24px 40px;
+      gap:24px;
+    }
+
+    .navbar__brand{
+      display:flex;
+      align-items:center;
+      gap:24px;
+      text-decoration:none;
+      color:#222222;
+      flex-shrink:0;
+    }
+
+    .navbar__logo-box{
+      width:76px;
+      height:76px;
+      border:3px solid #000000;
+      border-radius:22px;
+      background:#ff6236;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:38px;
+      box-shadow:3px 3px 0px #000000;
+    }
+
+    .navbar__logo-text{
+      font-size:40px;
+      font-weight:800;
+    }
+
+    .navbar__menu{
+      display:flex;
+      align-items:center;
+      gap:48px;
+      list-style:none;
+      margin-left:auto;
+    }
+
+    .navbar__item{
+      white-space:nowrap;
+    }
+
+    .navbar__link{
+      text-decoration:none;
+      font-size:30px;
+      font-weight:700;
+      color:#7d7d7d;
+    }
+
+    .navbar__link--highlight{
+      color:#ff6236;
+    }
+
+    .navbar__language{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      border:3px solid #000000;
+      border-radius:999px;
+      padding:10px 14px 10px 24px;
+      background:#ffffff;
+      box-shadow:3px 3px 0px #000000;
+      flex-shrink:0;
+    }
+
+    .navbar__language-label{
+      font-size:18px;
+      font-weight:700;
+      color:#9a9a9a;
+      letter-spacing:4px;
+      white-space:nowrap;
+    }
+
+    .navbar__language-buttons{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .navbar__language-button{
+      min-width:86px;
+      height:54px;
+      border:3px solid #000000;
+      border-radius:999px;
+      background:#ffffff;
+      color:#555555;
+      font-size:20px;
+      font-weight:800;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .navbar__language-button--active{
+      background:#ff6236;
+      color:#ffffff;
+    }
+
+    @media (max-width:1200px){
+      .navbar{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .navbar__menu{
+        margin-left:0;
+        flex-wrap:wrap;
+        gap:24px;
+      }
+
+      .navbar__language{
+        align-self:flex-end;
+      }
+    }
+
+    @media (max-width:768px){
+      body{
+        padding:24px 16px;
+      }
+
+      .navbar{
+        padding:20px;
+      }
+
+      .navbar__logo-text{
+        font-size:30px;
+      }
+
+      .navbar__menu{
+        display:none;
+      }
+
+      .navbar__language-label{
+        display:none;
+      }
+
+      .navbar__language-button{
+        min-width:70px;
+        height:30px;
+        font-size:18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="메인 네비게이션">
+    <a href="#" class="navbar__brand">
+      <div class="navbar__logo-box" aria-hidden="true">🐱</div>
+      <span class="navbar__logo-text">Aido</span>
+    </a>
+
+    <ul class="navbar__menu">
+      <li class="navbar__item">
+        <a href="#" class="navbar__link" id="menu-cat-friends">고양이 친구들</a>
+      </li>
+      <li class="navbar__item">
+        <a href="#" class="navbar__link navbar__link--highlight" id="menu-launch-alert">출시 알람 받기</a>
+      </li>
+    </ul>
+
+    <div class="navbar__language" aria-label="언어 선택">
+      <span class="navbar__language-label" id="language-label">언어</span>
+      <div class="navbar__language-buttons">
+        <button type="button" class="navbar__language-button navbar__language-button--active" id="button-ko">KO</button>
+        <button type="button" class="navbar__language-button" id="button-en">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    var koButton = document.getElementById("button-ko");
+    var enButton = document.getElementById("button-en");
+    var catFriendsMenu = document.getElementById("menu-cat-friends");
+    var launchAlertMenu = document.getElementById("menu-launch-alert");
+    var languageLabel = document.getElementById("language-label");
+    var htmlElement = document.documentElement;
+
+    function setLanguage(lang){
+      if(lang === "ko"){
+        htmlElement.lang = "ko";
+        catFriendsMenu.textContent = "고양이 친구들";
+        launchAlertMenu.textContent = "출시 알람 받기";
+        languageLabel.textContent = "언어";
+        koButton.classList.add("navbar__language-button--active");
+        enButton.classList.remove("navbar__language-button--active");
+      }else{
+        htmlElement.lang = "en";
+        catFriendsMenu.textContent = "Cat Friends";
+        launchAlertMenu.textContent = "Get Launch Alerts";
+        languageLabel.textContent = "LANGUAGE";
+        enButton.classList.add("navbar__language-button--active");
+        koButton.classList.remove("navbar__language-button--active");
+      }
+    }
+
+    koButton.addEventListener("click", function(){
+      setLanguage("ko");
+    });
+
+    enButton.addEventListener("click", function(){
+      setLanguage("en");
+    });
+  </script>
+</body>
+</html>

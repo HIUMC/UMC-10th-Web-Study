@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Mission 2</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+.container{
+
+display:grid;
+
+grid-template-columns: 2fr 1fr 1fr;
+
+grid-template-rows:
+80px
+320px
+220px
+220px
+120px;
+
+grid-template-areas:
+
+"header header header"
+"hero hero hero"
+"main space image"
+"main space extra"
+"banner banner banner";
+
+height:100vh;
+
+}
+
+
+/* HEADER (Flex 사용) */
+
+.header{
+
+grid-area:header;
+
+display:flex;
+
+}
+
+.logo{
+
+flex:1;
+
+background:#0e1a33;
+color:white;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+.menu{
+
+flex:2;
+
+background:#ef3c45;
+color:white;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+
+/* HERO */
+
+.hero{
+
+grid-area:hero;
+
+background:#4f7fb5;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:40px;
+color:white;
+
+}
+
+
+/* MAIN */
+
+.main{
+
+grid-area:main;
+
+background:#2c3e55;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:32px;
+color:white;
+
+}
+
+
+/* 가운데 여백 */
+
+.space{
+
+grid-area:space;
+
+background:white;
+
+}
+
+
+/* IMAGE */
+
+.image{
+
+grid-area:image;
+
+background:#9dbdc1;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+
+/* EXTRA */
+
+.extra{
+
+grid-area:extra;
+
+background:#4fb089;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+
+/* BANNER */
+
+.banner{
+
+grid-area:banner;
+
+background:#f2c96b;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:32px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="header">
+
+<div class="logo">HEADER</div>
+
+<div class="menu">MENU</div>
+
+</header>
+
+
+<section class="hero">HERO</section>
+
+
+<main class="main">MAIN</main>
+
+
+<div class="space"></div>
+
+
+<div class="image">IMAGE</div>
+
+
+<div class="extra">EXTRA</div>
+
+
+<footer class="banner">BANNER</footer>
+
+
+</div>
+
+</body>
+</html>
