@@ -1,0 +1,103 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { 
+    background-color: #e9eef2; /* 전체 회색 배경 */
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 60px;
+    font-family: sans-serif;
+}
+
+.todo-wrapper { 
+    background-color: white;
+    width: 100%;
+    max-width: 600px; 
+    padding: 30px; 
+    border-radius: 12px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.todo__lists-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.todo__section {
+    flex: 1;
+    min-width: 0;
+}
+
+.todo__subtitle { 
+    font-size: 14px; 
+    color: #333; 
+    margin-bottom: 15px; 
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 5px;
+}
+
+.todo__title { 
+    text-align: center; 
+    font-size: 20px;
+    margin-bottom: 25px; 
+}
+
+.todo__input-group { 
+    display: flex; 
+    gap: 8px; 
+    margin-bottom: 30px; 
+}
+
+.todo__input { 
+    flex: 1; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+}
+
+.todo__add-btn { 
+    padding: 10px 15px; 
+    background-color: #5cb85c; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.todo__subtitle { 
+    font-size: 14px; 
+    color: #333; 
+    margin-bottom: 10px; 
+    font-weight: bold;
+}
+
+.todo__list { list-style: none; margin-bottom: 20px; }
+
+.todo__item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px; 
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.todo__item button {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #5cb85c; /* 완료 버튼 초록색 */
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.todo__list--completed .todo__item button {
+    background-color: #d9534f; /* 삭제 버튼 빨간색 */
+}
