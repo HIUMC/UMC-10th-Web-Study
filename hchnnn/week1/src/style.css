@@ -6,5 +6,5 @@
 .todo-item__btn--done { background-color: #4CAF50; color: white; border: none; border-radius: 4px; padding: 5px 10px; margin-left: 10px; cursor: pointer; }
 .todo-item__btn--delete { background-color: #FF5252; color: white; border: none; border-radius: 4px; padding: 5px 10px; margin-left: 10px; cursor: pointer; }
 
-/* Modifier 예시 */
+/* Modifier 예시임 */
 .todo-item__text { font-size: 1.1rem; }
