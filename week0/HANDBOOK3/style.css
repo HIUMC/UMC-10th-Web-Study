@@ -27,8 +27,8 @@ body {
 }
 
 .todo__input-section {
-  width: 100%;
-  max-width: 900px;
+  text-align: center;
+  max-width: 100%;
   margin: 0 auto 30px;
 }
 
@@ -36,20 +36,13 @@ body {
   width: 100%;
   height: 3px;
   background: #d7dee8;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .todo__input {
-  display: block;
-  width: 80%;
-  max-width: 720px;
+  width: 800px;
   height: 58px;
-  margin: 0 auto;
   border: 3px solid #222;
-  background: #fff;
-  padding: 0 18px;
-  font-size: 26px;
-  outline: none;
 }
 
 .todo__input::placeholder {
@@ -95,7 +88,7 @@ body {
 }
 
 .todo__text {
-  font-size: 38px;
+  font-size: 20px;
   font-weight: 800;
   word-break: break-word;
 }
@@ -103,41 +96,15 @@ body {
 .todo__button {
   border: none;
   background: #dbe3ef;
-  color: #111;
   padding: 10px 14px;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
 }
 
-.todo__button:hover {
-  filter: brightness(0.95);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .todo__title {
-    font-size: 42px;
-    margin-bottom: 60px;
-  }
-
-  .todo__input {
-    width: 100%;
-    font-size: 20px;
-    height: 50px;
-  }
-
-  .todo__board {
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .todo__text {
-    font-size: 26px;
-  }
-
-  .todo__column-title {
-    font-size: 28px;
-  }
-
+.todo__empty {
+  color: #7a8696;
+  font-size: 22px;
+  text-align: center;
+  padding: 20px 0;
 }
