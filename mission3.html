@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .hidden{
+                display: none;
+            }
+
+            #clock{
+                font-size: 30px;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            #clock:hover {
+                color: #ff4757;
+                cursor: default;
+            }
+
+            button {
+                margin-left: 5px;
+                transition: transform 0.2s ease;
+            }
+            button:hover {
+                transform: scale(1.1);
+                cursor: pointer;
+            }
+
+            .todo-container h3 {
+                margin-top: 20px;
+            }
+        </style>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <div id="clock"></div>
+        
+        <form id="login-form">
+            <input required maxlength="15" type="text" placeholder="What is your name?">
+            <input type="submit" value="Log In">
+        </form>
+        
+        <h1 class="hidden"></h1>
+    
+        <form id="todo-form">
+            <input required type="text" placeholder="What will you do?">
+        </form>
+        
+        <div class="todo-container">
+            <h3>📝 해야 할 일</h3>
+            <ul id="todo-list"></ul> 
+
+            <h3>✅ 해낸 일</h3>
+            <ul id="done-list"></ul> 
+        </div>
+
+        <script>  
+            
+            const clock = document.querySelector("#clock");
+
+
+            function nowClock(){
+                const date = new Date();
+                const hours = String(date.getHours()).padStart(2,"0");
+                const minutes = String(date.getMinutes()).padStart(2,"0");
+                const seconds = String(date.getSeconds()).padStart(2,"0");
+                clock.innerHTML = `${hours} : ${minutes} : ${seconds}`;
+            }
+            nowClock()
+            setInterval(nowClock, 1000) 
+            
+            const todoForm = document.querySelector("#todo-form");
+            const todoInput = todoForm.querySelector("input");
+            const todoUl = document.querySelector("#todo-list");
+            const doneUl = document.querySelector("#done-list");
+
+            let Todos = [];
+            const TODOGET = "todo";
+
+            function savingTodo(){
+                localStorage.setItem(TODOGET, JSON.stringify(Todos));
+            }
+
+            function deleteTodo(e){
+                const li = e.target.parentElement;
+                Todos = Todos.filter(todo => todo.id !== parseInt(li.id));
+                li.remove();
+                savingTodo();
+            }
+
+            function toggleTodo(e) {
+                const li = e.target.parentElement;
+                Todos = Todos.map(todo => {
+                    if (todo.id === parseInt(li.id)) {
+                        return { ...todo, done: !todo.done };
+                    }
+                    return todo;
+                });
+                savingTodo();
+                rePaint();
+            }
+
+            function paintTodo(todo){
+                const li = document.createElement("li");
+                li.id = todo.id;
+                const span = document.createElement("span");
+                const delBtn = document.createElement("button");
+                const toggleBtn = document.createElement("button");
+
+                span.innerText = todo.text;
+                delBtn.innerText = "❌";
+                toggleBtn.innerText = todo.done ? "되돌리기" : "완료"; 
+
+                li.appendChild(span);
+                li.appendChild(toggleBtn);
+                li.appendChild(delBtn);
+
+                
+                if (todo.done) {
+                    doneUl.appendChild(li);
+                } else {
+                    todoUl.appendChild(li);
+                }
+
+                delBtn.addEventListener("click", deleteTodo);
+                toggleBtn.addEventListener("click", toggleTodo);
+            }
+
+
+            function rePaint() {
+                todoUl.innerHTML = "";
+                doneUl.innerHTML = "";
+                Todos.forEach(paintTodo);
+            }
+
+            function submitEvent(event){
+                event.preventDefault();
+                const newTodo = todoInput.value;
+                const ObNewTodo = {
+                    text: newTodo,
+                    id: Date.now(),
+                    done: false 
+                };
+                Todos.push(ObNewTodo);
+                todoInput.value = "";
+                savingTodo();
+                rePaint(); 
+            }
+
+            todoForm.addEventListener("submit", submitEvent);
+
+            const savedTodo = localStorage.getItem(TODOGET);
+
+            if(savedTodo !== null){
+                const parsedTodo = JSON.parse(savedTodo);
+                Todos = parsedTodo;
+                rePaint(); 
+            }            
+
+
+            const loginForm = document.querySelector("#login-form");
+            const loginInput = loginForm.querySelector("input:first-child");
+            const h1 = document.querySelector("h1");
+            const HIDDEN = "hidden"
+
+
+
+            function SubmitEvent(event){
+                event.preventDefault();
+                const username = loginInput.value;
+                localStorage.setItem("username", username);
+                basic(username);
+            }
+
+            function basic(username){
+                loginForm.classList.add(HIDDEN);
+                h1.innerText = `Hello ${username}`;
+                h1.classList.remove(HIDDEN);
+            }
+
+            const SavedUsername = localStorage.getItem("username")
+
+            if(SavedUsername===null){
+                loginForm.addEventListener("submit", SubmitEvent);
+            }
+            else{
+                basic(SavedUsername);
+            }
+        </script>
+    </body>
+</html>
