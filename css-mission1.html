@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      width: 1050px;
+      height: 80px;
+      background-color: white;
+      border: 3px solid #222;
+      border-radius: 20px;
+      padding: 0 30px;
+      box-shadow: 8px 8px 0px #222;
+    }
+
+    /* 로고 */
+    .logo { display: flex; align-items: center; gap: 15px; flex-shrink: 0; cursor: pointer; }
+    .logo__icon {
+      width: 50px; height: 50px;
+      background-color: #ff6b4a;
+      border: 3px solid #222;
+      border-radius: 15px;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .logo__text { font-size: 26px; font-weight: bold; color: #222; }
+
+    /* 중앙 메뉴 */
+    .nav-bar__menu {
+      display: flex;
+      gap: 30px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .nav-bar__link {
+      text-decoration: none;
+      color: #777; /* 기본 회색 */
+      font-weight: bold;
+      font-size: 15px;
+      transition: 0.2s;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    .nav-bar__link:hover { color: #222; }
+
+    /* ⭐ 메뉴 활성화 상태 (선택되면 주황색) */
+    .nav-bar__link--active {
+      color: #ff6b4a !important;
+    }
+
+    /* 언어 선택 섹션 */
+    .lang-selector {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 10px 15px 10px 25px;
+      border: 3px solid #222;
+      border-radius: 50px;
+      background-color: white;
+      box-shadow: 4px 4px 0px #222;
+    }
+    .lang-selector__label { color: #999; font-weight: bold; font-size: 14px; }
+
+    .lang-switch-item {
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid #222; border-radius: 30px; padding: 2px; background-color: white;
+    }
+    .lang-switch-btn {
+      background-color: transparent; color: #aaa; border: none;
+      padding: 6px 18px; font-weight: bold; cursor: pointer; border-radius: 20px;
+      font-size: 14px; transition: 0.2s;
+    }
+    .lang-switch-btn--active {
+      background-color: #ff6b4a !important; color: white !important;
+    }
+    /* ⭐ 화면 너비가 768px보다 작아지면 실행! */
+@media (max-width: 768px) {
+  /* 1. 중앙 메뉴들을 통째로 안 보이게 함 */
+  .nav-bar__menu {
+    display: none;
+  }
+
+  /* 2. 바의 전체 너비를 화면에 맞게 유동적으로 변경 */
+  .nav-bar {
+    width: 90%; /* 고정 폭 1050px 대신 화면의 90%만 차지하게 */
+    justify-content: space-between; /* 로고와 언어 스위치를 양끝으로 밀기 */
+  }
+}
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="logo">
+      <div class="logo__icon">🐱</div>
+      <span class="logo__text">Aido</span>
+    </div>
+
+    <div class="nav-bar__menu">
+      <button class="nav-bar__link" onclick="toggleActive(this, 'nav-bar__link')">고양이 친구들</button>
+      <button class="nav-bar__link" onclick="toggleActive(this, 'nav-bar__link')">패치 노트</button>
+      <button class="nav-bar__link nav-bar__link--active" onclick="toggleActive(this, 'nav-bar__link')">앱 다운로드</button>
+    </div>
+
+    <div class="lang-selector">
+      <span class="lang-selector__label">언어</span>
+      <div class="lang-switch-item">
+        <button class="lang-switch-btn lang-switch-btn--active" onclick="toggleActive(this, 'lang-switch-btn')">KO</button>
+      </div>
+      <div class="lang-switch-item">
+        <button class="lang-switch-btn" onclick="toggleActive(this, 'lang-switch-btn')">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    // 모든 종류의 버튼 활성화를 처리하는 만능 함수!
+    function toggleActive(clickedBtn, className) {
+      // 1. 해당 클래스를 가진 모든 버튼을 찾아서 활성화 클래스를 지움
+      const buttons = document.querySelectorAll('.' + className);
+      buttons.forEach(btn => btn.classList.remove(className + '--active'));
+
+      // 2. 클릭한 버튼에만 활성화 클래스 추가
+      clickedBtn.classList.add(className + '--active');
+    }
+  </script>
+</body>
+</html>

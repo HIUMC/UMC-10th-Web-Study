@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo list</title>
+
+    <style>
+        body{
+            margin: 0;
+        }
+
+        .title{
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        input{
+            display: block;
+            margin: 0 auto 40px;
+            width: 300px;
+            height: 30px;
+        }
+
+        .grid_con{
+            width: 700px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .list_box{
+            min-height: 250px;
+        }
+
+        .list-title{
+            display: block;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 700;
+            border-bottom: 1px solid black;
+            padding-bottom: 10px;
+        }
+
+        .todo,
+        .done{
+            padding: 10px;
+        }
+        
+    </style>
+    
+    <script type="module" src="./dist/script.js" defer></script>
+</head>
+<body>
+
+
+
+    <div class="title">UMC Study Plan</div>
+    <input class="input" type="text">
+    <div class="grid_con">
+        <div class="list_box">
+            <span class="list-title">해야 할 일</span>
+            <section class="todo"></section>
+        </div>
+        <div class="list_box">
+            <span class="list-title">해낸 일</span>
+            <section class="done"></section>
+        </div>
+    </div>
+    
+
+
+
+
+
+</body>
+</html>
