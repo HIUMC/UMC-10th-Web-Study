@@ -1,3 +1,5 @@
+"use strict";
+
 const inputElement = document.getElementById("todoInput");
 const addButtonElement = document.getElementById("addButton");
 const todoListElement = document.getElementById("todoList");
@@ -18,22 +20,12 @@ const todoList: HTMLUListElement = todoListElement;
 const doneList: HTMLUListElement = doneListElement;
 
 function isDuplicate(text: string): boolean {
-  const todoTexts = todoList.querySelectorAll(".todo-item__text");
-  const doneTexts = doneList.querySelectorAll(".todo-item__text");
+  const texts = [
+    ...todoList.querySelectorAll(".todo-item__text"),
+    ...doneList.querySelectorAll(".todo-item__text"),
+  ];
 
-  for (const item of todoTexts) {
-    if (item.textContent === text) {
-      return true;
-    }
-  }
-
-  for (const item of doneTexts) {
-    if (item.textContent === text) {
-      return true;
-    }
-  }
-
-  return false;
+  return texts.some((item) => item.textContent === text);
 }
 
 function deleteItem(item: HTMLLIElement): void {
@@ -108,6 +100,7 @@ function addTodo(): void {
 
   const item = createTodoItem(value);
   todoList.appendChild(item);
+
   input.value = "";
   input.focus();
 }

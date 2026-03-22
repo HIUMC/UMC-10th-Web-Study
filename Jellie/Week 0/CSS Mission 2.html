@@ -33,14 +33,11 @@ grid-template-areas:
 "hero hero hero"
 "main space image"
 "main space extra"
-"banner banner banner";
+"footer footer footer";
 
 height:100vh;
 
 }
-
-
-/* HEADER (Flex 사용) */
 
 .header{
 
@@ -80,9 +77,6 @@ font-size:28px;
 
 }
 
-
-/* HERO */
-
 .hero{
 
 grid-area:hero;
@@ -97,9 +91,6 @@ font-size:40px;
 color:white;
 
 }
-
-
-/* MAIN */
 
 .main{
 
@@ -116,9 +107,6 @@ color:white;
 
 }
 
-
-/* 가운데 여백 */
-
 .space{
 
 grid-area:space;
@@ -126,9 +114,6 @@ grid-area:space;
 background:white;
 
 }
-
-
-/* IMAGE */
 
 .image{
 
@@ -144,9 +129,6 @@ font-size:28px;
 
 }
 
-
-/* EXTRA */
-
 .extra{
 
 grid-area:extra;
@@ -161,12 +143,9 @@ font-size:28px;
 
 }
 
+.footer{
 
-/* BANNER */
-
-.banner{
-
-grid-area:banner;
+grid-area:footer;
 
 background:#f2c96b;
 
@@ -190,7 +169,7 @@ font-size:32px;
 
 <div class="logo">HEADER</div>
 
-<div class="menu">MENU</div>
+<nav class="menu">MENU</nav>
 
 </header>
 
@@ -204,13 +183,13 @@ font-size:32px;
 <div class="space"></div>
 
 
-<div class="image">IMAGE</div>
+<figure class="image">IMAGE</figure>
 
 
-<div class="extra">EXTRA</div>
+<aside class="extra">EXTRA</aside>
 
 
-<footer class="banner">BANNER</footer>
+<footer class="footer">BANNER</footer>
 
 
 </div>

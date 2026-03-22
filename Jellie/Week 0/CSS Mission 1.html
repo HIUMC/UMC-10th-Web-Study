@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSS Mission 1</title>
+  <title>CSS Mission 2</title>
   <style>
     *{
       margin:0;
@@ -15,6 +15,10 @@
       background:#f3f1ee;
       font-family:Arial, sans-serif;
       padding:60px 40px;
+    }
+
+    .site-header{
+      width:100%;
     }
 
     .navbar{
@@ -59,12 +63,15 @@
       font-weight:800;
     }
 
+    .navbar__menu-nav{
+      margin-left:auto;
+    }
+
     .navbar__menu{
       display:flex;
       align-items:center;
       gap:48px;
       list-style:none;
-      margin-left:auto;
     }
 
     .navbar__item{
@@ -132,8 +139,11 @@
         align-items:flex-start;
       }
 
-      .navbar__menu{
+      .navbar__menu-nav{
         margin-left:0;
+      }
+
+      .navbar__menu{
         flex-wrap:wrap;
         gap:24px;
       }
@@ -156,7 +166,7 @@
         font-size:30px;
       }
 
-      .navbar__menu{
+      .navbar__menu-nav{
         display:none;
       }
 
@@ -173,29 +183,33 @@
   </style>
 </head>
 <body>
-  <nav class="navbar" aria-label="메인 네비게이션">
-    <a href="#" class="navbar__brand">
-      <div class="navbar__logo-box" aria-hidden="true">🐱</div>
-      <span class="navbar__logo-text">Aido</span>
-    </a>
+  <header class="site-header">
+    <div class="navbar">
+      <a href="#" class="navbar__brand">
+        <div class="navbar__logo-box" aria-hidden="true">🐱</div>
+        <span class="navbar__logo-text">Aido</span>
+      </a>
 
-    <ul class="navbar__menu">
-      <li class="navbar__item">
-        <a href="#" class="navbar__link" id="menu-cat-friends">고양이 친구들</a>
-      </li>
-      <li class="navbar__item">
-        <a href="#" class="navbar__link navbar__link--highlight" id="menu-launch-alert">출시 알람 받기</a>
-      </li>
-    </ul>
+      <nav class="navbar__menu-nav" aria-label="메인 메뉴">
+        <ul class="navbar__menu">
+          <li class="navbar__item">
+            <a href="#" class="navbar__link" id="menu-cat-friends">고양이 친구들</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link navbar__link--highlight" id="menu-launch-alert">출시 알람 받기</a>
+          </li>
+        </ul>
+      </nav>
 
-    <div class="navbar__language" aria-label="언어 선택">
-      <span class="navbar__language-label" id="language-label">언어</span>
-      <div class="navbar__language-buttons">
-        <button type="button" class="navbar__language-button navbar__language-button--active" id="button-ko">KO</button>
-        <button type="button" class="navbar__language-button" id="button-en">EN</button>
+      <div class="navbar__language" aria-label="언어 선택">
+        <span class="navbar__language-label" id="language-label">언어</span>
+        <div class="navbar__language-buttons">
+          <button type="button" class="navbar__language-button navbar__language-button--active" id="button-ko">KO</button>
+          <button type="button" class="navbar__language-button" id="button-en">EN</button>
+        </div>
       </div>
     </div>
-  </nav>
+  </header>
 
   <script>
     var koButton = document.getElementById("button-ko");
@@ -205,19 +219,33 @@
     var languageLabel = document.getElementById("language-label");
     var htmlElement = document.documentElement;
 
+    var translations = {
+      ko: {
+        htmlLang: "ko",
+        catFriends: "고양이 친구들",
+        launchAlert: "출시 알람 받기",
+        language: "언어"
+      },
+      en: {
+        htmlLang: "en",
+        catFriends: "Cat Friends",
+        launchAlert: "Get Launch Alerts",
+        language: "LANGUAGE"
+      }
+    };
+
     function setLanguage(lang){
+      var current = translations[lang];
+
+      htmlElement.lang = current.htmlLang;
+      catFriendsMenu.textContent = current.catFriends;
+      launchAlertMenu.textContent = current.launchAlert;
+      languageLabel.textContent = current.language;
+
       if(lang === "ko"){
-        htmlElement.lang = "ko";
-        catFriendsMenu.textContent = "고양이 친구들";
-        launchAlertMenu.textContent = "출시 알람 받기";
-        languageLabel.textContent = "언어";
         koButton.classList.add("navbar__language-button--active");
         enButton.classList.remove("navbar__language-button--active");
       }else{
-        htmlElement.lang = "en";
-        catFriendsMenu.textContent = "Cat Friends";
-        launchAlertMenu.textContent = "Get Launch Alerts";
-        languageLabel.textContent = "LANGUAGE";
         enButton.classList.add("navbar__language-button--active");
         koButton.classList.remove("navbar__language-button--active");
       }
