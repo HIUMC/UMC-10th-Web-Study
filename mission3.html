@@ -1,191 +1,149 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <style>
-            .hidden{
-                display: none;
-            }
+<html lang = "ko">
+<head>
+  <title>UMC Study Plan</title>
+  <style>
+    * {
+      margin: 0;
+      box-sizing: border-box;
+    }
 
-            #clock{
-                font-size: 30px;
-                font-weight: 500;
-                transition: color 0.3s ease;
-            }
+    body {
+      background-color: #dce6f5;
+      padding: 40px;
+      font-family: sans-serif;
+    }
 
-            #clock:hover {
-                color: #ff4757;
-                cursor: default;
-            }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-            button {
-                margin-left: 5px;
-                transition: transform 0.2s ease;
-            }
-            button:hover {
-                transform: scale(1.1);
-                cursor: pointer;
-            }
+    /* 입력창 */
+    .todo__input {
+      display: block;
+      width: 60%;
+      margin: 0 auto 30px;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      font-size: 16px;
+    }
 
-            .todo-container h3 {
-                margin-top: 20px;
-            }
-        </style>
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <div id="clock"></div>
-        
-        <form id="login-form">
-            <input required maxlength="15" type="text" placeholder="What is your name?">
-            <input type="submit" value="Log In">
-        </form>
-        
-        <h1 class="hidden"></h1>
-    
-        <form id="todo-form">
-            <input required type="text" placeholder="What will you do?">
-        </form>
-        
-        <div class="todo-container">
-            <h3>📝 해야 할 일</h3>
-            <ul id="todo-list"></ul> 
+    /* 할일 목록 컨테이너 */
+    .todo__lists {
+      display: flex;
+      justify-content: center;
+      gap: 100px;
+    }
 
-            <h3>✅ 해낸 일</h3>
-            <ul id="done-list"></ul> 
-        </div>
+    .todo__section h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
 
-        <script>  
-            
-            const clock = document.querySelector("#clock");
+    /* 각 아이템 */
+    .todo__item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 10px;
+    }
 
+    .todo__item span {
+      font-size: 15px;
+    }
 
-            function nowClock(){
-                const date = new Date();
-                const hours = String(date.getHours()).padStart(2,"0");
-                const minutes = String(date.getMinutes()).padStart(2,"0");
-                const seconds = String(date.getSeconds()).padStart(2,"0");
-                clock.innerHTML = `${hours} : ${minutes} : ${seconds}`;
-            }
-            nowClock()
-            setInterval(nowClock, 1000) 
-            
-            const todoForm = document.querySelector("#todo-form");
-            const todoInput = todoForm.querySelector("input");
-            const todoUl = document.querySelector("#todo-list");
-            const doneUl = document.querySelector("#done-list");
+    .todo__btn {
+      padding: 2px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      border: 1px solid #aaa;
+      background: white;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
 
-            let Todos = [];
-            const TODOGET = "todo";
+  <h1>UMC Study Plan</h1>
 
-            function savingTodo(){
-                localStorage.setItem(TODOGET, JSON.stringify(Todos));
-            }
+  <input
+    class="todo__input"
+    type="text"
+    placeholder="스터디 계획을 작성해보세요!"
+  />
 
-            function deleteTodo(e){
-                const li = e.target.parentElement;
-                Todos = Todos.filter(todo => todo.id !== parseInt(li.id));
-                li.remove();
-                savingTodo();
-            }
+  <div class="todo__lists">
+    <section class="todo__section">
+      <h2>해야 할 일</h2>
+      <div class="todo__pending"></div>
+    </section>
 
-            function toggleTodo(e) {
-                const li = e.target.parentElement;
-                Todos = Todos.map(todo => {
-                    if (todo.id === parseInt(li.id)) {
-                        return { ...todo, done: !todo.done };
-                    }
-                    return todo;
-                });
-                savingTodo();
-                rePaint();
-            }
+    <section class="todo__section">
+      <h2>해낸 일</h2>
+      <div class="todo__done"></div>
+    </section>
+  </div>
 
-            function paintTodo(todo){
-                const li = document.createElement("li");
-                li.id = todo.id;
-                const span = document.createElement("span");
-                const delBtn = document.createElement("button");
-                const toggleBtn = document.createElement("button");
+  <script>
+    const input = document.querySelector('.todo__input');
+    const pendingList = document.querySelector('.todo__pending');
+    const doneList = document.querySelector('.todo__done');
 
-                span.innerText = todo.text;
-                delBtn.innerText = "❌";
-                toggleBtn.innerText = todo.done ? "되돌리기" : "완료"; 
+    // Enter 누르면 추가
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        addTodo(input.value.trim());
+        input.value = '';
+      }
+    });
 
-                li.appendChild(span);
-                li.appendChild(toggleBtn);
-                li.appendChild(delBtn);
+    function addTodo(text) {
+      if (!text) return;
 
-                
-                if (todo.done) {
-                    doneUl.appendChild(li);
-                } else {
-                    todoUl.appendChild(li);
-                }
+      const item = document.createElement('div');
+      item.className = 'todo__item';
 
-                delBtn.addEventListener("click", deleteTodo);
-                toggleBtn.addEventListener("click", toggleTodo);
-            }
+      const span = document.createElement('span');
+      span.textContent = text;
 
+      const completeBtn = document.createElement('button');
+      completeBtn.className = 'todo__btn';
+      completeBtn.textContent = '완료';
+      completeBtn.addEventListener('click', () => completeTodo(item, text));
 
-            function rePaint() {
-                todoUl.innerHTML = "";
-                doneUl.innerHTML = "";
-                Todos.forEach(paintTodo);
-            }
+      item.appendChild(span);
+      item.appendChild(completeBtn);
+      pendingList.appendChild(item);
+    }
 
-            function submitEvent(event){
-                event.preventDefault();
-                const newTodo = todoInput.value;
-                const ObNewTodo = {
-                    text: newTodo,
-                    id: Date.now(),
-                    done: false 
-                };
-                Todos.push(ObNewTodo);
-                todoInput.value = "";
-                savingTodo();
-                rePaint(); 
-            }
+    function completeTodo(item, text) {
+      item.remove();
 
-            todoForm.addEventListener("submit", submitEvent);
+      const doneItem = document.createElement('div');
+      doneItem.className = 'todo__item';
 
-            const savedTodo = localStorage.getItem(TODOGET);
+      const span = document.createElement('span');
+      span.textContent = text;
 
-            if(savedTodo !== null){
-                const parsedTodo = JSON.parse(savedTodo);
-                Todos = parsedTodo;
-                rePaint(); 
-            }            
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'todo__btn';
+      deleteBtn.textContent = '삭제';
+      deleteBtn.addEventListener('click', () => deleteTodo(doneItem));
 
+      doneItem.appendChild(span);
+      doneItem.appendChild(deleteBtn);
+      doneList.appendChild(doneItem);
+    }
 
-            const loginForm = document.querySelector("#login-form");
-            const loginInput = loginForm.querySelector("input:first-child");
-            const h1 = document.querySelector("h1");
-            const HIDDEN = "hidden"
+    function deleteTodo(item) {
+      item.remove();
+    }
+  </script>
 
-
-
-            function SubmitEvent(event){
-                event.preventDefault();
-                const username = loginInput.value;
-                localStorage.setItem("username", username);
-                basic(username);
-            }
-
-            function basic(username){
-                loginForm.classList.add(HIDDEN);
-                h1.innerText = `Hello ${username}`;
-                h1.classList.remove(HIDDEN);
-            }
-
-            const SavedUsername = localStorage.getItem("username")
-
-            if(SavedUsername===null){
-                loginForm.addEventListener("submit", SubmitEvent);
-            }
-            else{
-                basic(SavedUsername);
-            }
-        </script>
-    </body>
+</body>
 </html>
+

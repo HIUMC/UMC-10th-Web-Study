@@ -1,87 +1,130 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang = "ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>0주차 미션2</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <style>
+    * {
+      margin: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            color: white;
-            font-weight: bold;
-        }
+    .navbar {
+      display: flex;
+      height: 100px;
+    }
 
-        .container {
-            display: grid;
-            height: 100vh;
-            grid-template-columns: 2fr 0.5fr 1fr;
-            grid-template-rows: 60px 250px 1fr 1fr 80px;
-            
-            grid-template-areas:
-                "header menu menu"
-                "hero hero hero"
-                "main empty image"
-                "main empty extra"
-                "banner banner banner";
-        }
+    .navbar__header {
+      width: 30%;
+      background-color: #1a2340;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-        .container > div, 
-        .container > section,
-        .container > header, 
-        .container > nav, 
-        .container > main, 
-        .container > footer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
+    .navbar__menu {
+      width: 70%;
+      background-color: #e84057;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-        .header { grid-area: header; background-color: #1a2533; }
-        .menu   { grid-area: menu;   background-color: #f04e58; }
-        .hero   { grid-area: hero;   background-color: #5489c7; }
-        .main   { grid-area: main;   background-color: #263347; }
-        .empty  { grid-area: empty;  background-color: #ffffff; color: black; }
-        .image  { grid-area: image;  background-color: #c2e5e8; color: black; }
-        .extra  { grid-area: extra;  background-color: #57bd93; color: black; }
-        .banner { grid-area: banner; background-color: #ffcf66; color: black; }
+    /* HERO */
+    .hero {
+      background-color: #4a7bc8;
+      color: white;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+    }
 
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto;
-                grid-template-areas:
-                    "header"
-                    "menu"
-                    "hero"
-                    "main"
-                    "image"
-                    "extra"
-                    "banner";
-            }
-            .empty { display: none; }
-        }
-    </style>
+    /* CONTENT 영역 */
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      height: 400px;
+    }
+
+    .content__main {
+      background-color: #1a2340;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .content__blank {
+      background-color: white;
+    }
+
+    .content__side {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content__image {
+      background-color: #7ecec4;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .content__extra {
+      background-color: #2ecc71;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* BANNER */
+    .banner {
+      background-color: #f0b429;
+      color: white;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <header class="header">HEADER</header>
-        <nav class="menu">MENU</nav>
-        <section class="hero">HERO</section>
-        <main class="main">MAIN</main>
-        <div class="empty"></div> <div class="image">IMAGE</div>
-        <div class="extra">EXTRA</div>
-        <footer class="banner">BANNER</footer>
-    </div>
+  <nav class="navbar">
+    <div class="navbar__header">HEADER</div>
+    <div class="navbar__menu">MENU</div>
+  </nav>
 
+  <div class="hero">HERO</div>
+
+  <div class="content">
+    <div class="content__main">MAIN</div>
+    <div class="content__blank"></div>
+    <div class="content__side">
+      <div class="content__image">IMAGE</div>
+      <div class="content__extra">EXTRA</div>
+    </div>
+  </div>
+
+  <div class="banner">BANNER</div>
 
 </body>
 </html>
+
