@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aido</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="navbar-wrapper">
+      <nav class="navbar">
+        <a href="/" class="navbar__logo">
+          <img src="./logo.png" alt="Aido logo" class="navbar__logo-img" />
+          Aido
+        </a>
+
+        <ul class="navbar__menu">
+          <li>
+            <a
+              href="#"
+              class="navbar__menu-link"
+              data-translate="catFriends"
+            ></a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="navbar__menu-link"
+              data-translate="patchNotes"
+            ></a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="navbar__menu-link navbar__menu-link--highlight"
+              data-translate="downloadApp"
+            ></a>
+          </li>
+        </ul>
+
+        <div class="navbar__actions">
+          <div class="navbar__lang">
+            <span class="navbar__lang-label">LANGUAGE</span>
+            <button
+              class="navbar__lang-btn navbar__lang-btn--active"
+              data-lang="ko"
+            >
+              KO
+            </button>
+            <button class="navbar__lang-btn" data-lang="en">EN</button>
+          </div>
+
+          <button class="navbar__hamburger">
+            <span class="navbar__hamburger-line"></span>
+            <span class="navbar__hamburger-line"></span>
+            <span class="navbar__hamburger-line"></span>
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <script>
+      const translations = {
+        en: {
+          catFriends: "Cat Friends",
+          patchNotes: "Patch Notes",
+          downloadApp: "Download App",
+        },
+        ko: {
+          catFriends: "고양이 친구들",
+          patchNotes: "패치 노트",
+          downloadApp: "앱 다운로드",
+        },
+      };
+
+      function applyLang(lang) {
+        const t = translations[lang];
+
+        document.querySelectorAll("[data-translate]").forEach((el) => {
+          const key = el.dataset.translate;
+          if (t[key]) el.textContent = t[key];
+        });
+
+        document.documentElement.setAttribute("lang", lang);
+
+        document.querySelectorAll("[data-lang]").forEach((btn) => {
+          btn.classList.toggle(
+            "navbar__lang-btn--active",
+            btn.dataset.lang === lang,
+          );
+        });
+      }
+
+      document.querySelectorAll("[data-lang]").forEach((btn) => {
+        btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+      });
+
+      applyLang("ko");
+    </script>
+  </body>
+</html>
