@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Mission 2 - Layout Master</title>
+  <style>
+    /* 기본 스타일 초기화 */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: sans-serif; font-weight: bold; color: white; font-size: 2rem; }
+
+    /* BEM: Block - 레이아웃 전체 컨테이너 */
+    .layout-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* 세로 1줄 */
+      grid-template-rows: 100px 300px 400px 100px; 
+      min-height: 100vh;
+    }
+
+    .layout-grid__top {
+      display: flex;
+    }
+    .header { width: 25%; background-color: #1a2333; display: flex; align-items: center; justify-content: center; }
+    .menu { width: 75%; background-color: #ef474f; display: flex; align-items: center; justify-content: center; }
+
+
+    .hero { background-color: #5185c1; display: flex; align-items: center; justify-content: center; }
+
+
+    .layout-grid__content {
+      display: grid;
+    
+      grid-template-columns: 5fr 2.5fr 2.5fr; 
+    }
+    .main { background-color: #26354a; display: flex; align-items: center; justify-content: center; }
+    .empty { background-color: white; } 
+    
+    
+    .side-bar {
+      display: grid;
+      grid-template-rows: 1fr 1fr; 
+    }
+    .image { background-color: #c0e5e7; color: black; display: flex; align-items: center; justify-content: center; }
+    .extra { background-color: #54c095; display: flex; align-items: center; justify-content: center; }
+
+    
+    .banner { background-color: #f6cd61; color: black; display: flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+<body>
+
+  <div class="layout-grid">
+    <div class="layout-grid__top">
+      <header class="header">HEADER</header>
+      <nav class="menu">MENU</nav>
+    </div>
+
+    <section class="hero">HERO</section>
+
+    <main class="layout-grid__content">
+      <div class="main">MAIN</div>
+      <div class="empty"></div> <div class="side-bar">
+        <div class="image">IMAGE</div>
+        <div class="extra">EXTRA</div>
+      </div>
+    </main>
+
+    <footer class="banner">BANNER</footer>
+  </div>
+
+</body>
+</html>
