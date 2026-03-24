@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sketch-border {
+            border-radius: 25px 50px 30px 45px / 40px 25px 55px 35px;
+        }
+        body {
+            background-color: #FDF6F0;
+            background-image: radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10 font-sans">
+
+<div class="max-w-5xl mx-auto relative pt-10">
+    
+    <div class="absolute -top-6 left-10 z-10 hidden md:block">
+        <div class="text-6xl animate-bounce">🐶</div>
+    </div>
+
+    <nav class="flex items-center justify-between px-6 py-4 bg-white border-[3px] border-black sketch-border shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-20">
+        
+        <div class="flex items-center gap-3 shrink-0">
+            <div class="w-10 h-10 bg-[#FFD562] rounded-xl border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_black]">
+                <span class="text-xl">🐕</span>
+            </div>
+            <span class="text-2xl font-black text-gray-900">Aido</span>
+        </div>
+
+        <ul class="hidden md:flex items-center gap-8 text-[15px] font-bold text-gray-500 whitespace-nowrap">
+            <li id="menu-friends" class="hover:text-black cursor-pointer">강아지 친구들</li>
+            <li id="menu-patch" class="hover:text-black cursor-pointer">패치 노트</li>
+            <li id="menu-download" class="text-[#FF7043] cursor-pointer">앱 다운로드</li>
+        </ul>
+
+        <div class="flex items-center border-[2px] border-black rounded-full p-1 bg-white shrink-0">
+            <span id="lang-label" class="text-[10px] font-black text-gray-400 px-2">언어</span>
+            <button id="btn-ko" onclick="setLanguage('ko')" class="bg-[#FF7043] text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-[1px_1px_0px_0px_black]">KO</button>
+            <button id="btn-en" onclick="setLanguage('en')" class="text-gray-400 text-[11px] font-bold px-3 py-1 rounded-full border border-transparent ml-1">EN</button>
+        </div>
+    </nav>
+
+    <main class="flex flex-col items-center text-center">
+        <div class="w-40 h-40 bg-[#FFD562] border-[3px] border-black rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center overflow-hidden mb-8">
+            <span class="text-8xl">🐶</span>
+        </div>
+
+        <h1 class="text-3xl md:text-5xl font-black text-gray-800 leading-tight">
+            작심삼일은 이제 그만,<br>
+            <span class="text-[#FF7043]">친구와 함께 매일</span> 성취하세요
+        </h1>
+    </main>
+</div>
+
+<script>
+    // 언어 전환 로직 (이전과 동일)
+    function setLanguage(lang) {
+        const translations = {
+            ko: { friends: "강아지 친구들", patch: "패치 노트", download: "앱 다운로드", label: "언어" },
+            en: { friends: "Doggy Friends", patch: "Patch Notes", download: "App Download", label: "LANG" }
+        };
+        document.getElementById('menu-friends').innerText = translations[lang].friends;
+        document.getElementById('menu-patch').innerText = translations[lang].patch;
+        document.getElementById('menu-download').innerText = translations[lang].download;
+        document.getElementById('lang-label').innerText = translations[lang].label;
+        
+        // 버튼 스타일 업데이트
+        const isKo = lang === 'ko';
+        document.getElementById('btn-ko').className = isKo ? "bg-[#FF7043] text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-[1px_1px_0px_0px_black]" : "text-gray-400 text-[11px] font-bold px-3 py-1 rounded-full border border-transparent";
+        document.getElementById('btn-en').className = !isKo ? "bg-[#FF7043] text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-[1px_1px_0px_0px_black]" : "text-gray-400 text-[11px] font-bold px-3 py-1 rounded-full border border-transparent ml-1";
+    }
+</script>
+
+</body>
+</html>
