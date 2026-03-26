@@ -1,10 +1,8 @@
 import clsx from "clsx";
-import { THEME, useTheme } from "./context/ThemeProvider";
+import { useTheme } from "./context/ThemeProvider";
 
 export default function ThemeContent() {
-  const { theme } = useTheme();
-
-  const isLightMode = theme === THEME.LIGHT;
+  const { isLightMode } = useTheme();
 
   return (
     <div

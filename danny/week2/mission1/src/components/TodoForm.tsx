@@ -5,7 +5,7 @@ const TodoForm = () => {
   const [input, setInput] = useState<string>("");
   const { addTodo } = useTodo();
 
-  const handleSubmit = (e: any): void => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const text = input.trim();
 
@@ -19,7 +19,9 @@ const TodoForm = () => {
     <form onSubmit={handleSubmit} className="todo-container__form">
       <input
         value={input}
-        onChange={(e): any => setInput(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setInput(e.target.value)
+        }
         type="text"
         className="todo-container__input"
         placeholder="할 일 입력"
