@@ -1,12 +1,9 @@
+import { useTodo } from '../context/TodoContext';
 import TaskItem from './TaskItem';
-import type { Task } from '../App';
 
-type DoneListProps = {
-  doneTasks: Task[];
-  deleteTask: (task: Task) => void;
-};
+function DoneList() {
+  const { doneTasks, deleteTask } = useTodo();
 
-function DoneList({ doneTasks, deleteTask }: DoneListProps) {
   return (
     <div className="render-container__section">
       <h2 className="render-container__title">완료</h2>

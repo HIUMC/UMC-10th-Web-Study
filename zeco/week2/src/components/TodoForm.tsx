@@ -1,10 +1,8 @@
-type TodoFormProps = {
-  input: string;
-  setInput: React.Dispatch<React.SetStateAction<string>>;
-  addTodo: () => void;
-};
+import { useTodo } from '../context/TodoContext';
 
-function TodoForm({ input, setInput, addTodo }: TodoFormProps) {
+function TodoForm() {
+  const { input, setInput, addTodo } = useTodo();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addTodo();

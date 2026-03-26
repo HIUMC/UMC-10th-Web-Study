@@ -1,12 +1,9 @@
+import { useTodo } from '../context/TodoContext';
 import TaskItem from './TaskItem';
-import type { Task } from '../App';
 
-type TodoListProps = {
-  todos: Task[];
-  completeTask: (task: Task) => void;
-};
+function TodoList() {
+  const { todos, completeTask } = useTodo();
 
-function TodoList({ todos, completeTask }: TodoListProps) {
   return (
     <div className="render-container__section">
       <h2 className="render-container__title">할 일</h2>
