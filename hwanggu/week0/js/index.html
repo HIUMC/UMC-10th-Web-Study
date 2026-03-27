@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UMC Study Plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>UMC Study Plan</h1>
+        <hr class="divider" />
+      </header>
+
+      <div class="input-area">
+        <input
+          type="text"
+          id="todo-input"
+          placeholder="스터디 계획을 작성해주세요!"
+          autocomplete="off"
+        />
+      </div>
+
+      <main class="main">
+        <section class="todo-section">
+          <h2 class="section-title">해야 할 일 </h2>
+          <ul class="todo-list" id="todo-list"></ul>
+        </section>
+
+        <section class="done-section">
+          <h2 class="section-title">해낸 일 </h2>
+          <ul class="todo-list" id="done-list"></ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
