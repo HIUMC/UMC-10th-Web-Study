@@ -1,53 +1,144 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { type MovieResponse, type Movie } from '../types/movies';
 import MovieCard from '../components/MovieCard';
+import LoadingSpinner from '../components/LoadingSpinner';
+import type { Movie, MovieResponse } from '../types/movies';
 
-export default function MoviePage() {
+interface MoviePageProps {
+  title: string;
+  endpoint: string;
+}
+
+const MOVIES_PER_PAGE = 10;
+const MAX_PAGE = 500;
+
+export default function MoviePage({ title, endpoint }: MoviePageProps) {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    setPage(1);
+  }, [endpoint]);
+
+  useEffect(() => {
+    const fetchMovies = async function () {
       try {
-        setLoading(true);
+        setIsLoading(true);
         setError('');
 
         const { data } = await axios.get<MovieResponse>(
-          'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1',
+          'https://api.themoviedb.org/3/movie/' +
+            endpoint +
+            '?language=ko-KR&page=' +
+            page,
           {
             headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_TMDB_KEY}`,
+              Authorization: 'Bearer ' + import.meta.env.VITE_TMDB_KEY,
             },
           }
         );
 
-        setMovies(data.results);
+        setMovies(data.results.slice(0, MOVIES_PER_PAGE));
       } catch (error) {
         console.error(error);
-        setError('영화 데이터를 불러오지 못했습니다.');
+        setError('에러가 발생했습니다.');
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchMovies();
-  }, []);
+  }, [endpoint, page]);
 
-  if (loading) {
-    return <div className='p-10 text-white'>로딩 중...</div>;
+  const goToPrevPage = function () {
+    setPage(function (prevPage) {
+      if (prevPage === 1) {
+        return MAX_PAGE;
+      }
+      return prevPage - 1;
+    });
+  };
+
+  const goToNextPage = function () {
+    setPage(function (prevPage) {
+      if (prevPage === MAX_PAGE) {
+        return 1;
+      }
+      return prevPage + 1;
+    });
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return <div className='p-10 text-red-500'>{error}</div>;
+    return (
+      <section>
+        <div className='mb-6 flex flex-wrap items-center justify-between gap-4'>
+          <div>
+            <h1 className='text-3xl font-bold text-lime-300'>{title}</h1>
+            <p className='mt-2 text-sm text-gray-400'>현재 페이지</p>
+          </div>
+
+          <div className='flex items-center gap-4'>
+            <button
+              type='button'
+              onClick={goToPrevPage}
+              className='rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20'
+            >
+              {'<'}
+            </button>
+            <span className='text-base font-semibold text-white'>{page}</span>
+            <button
+              type='button'
+              onClick={goToNextPage}
+              className='rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20'
+            >
+              {'>'}
+            </button>
+          </div>
+        </div>
+
+        <p className='text-red-400'>{error}</p>
+      </section>
+    );
   }
 
   return (
-    <div className='p-10 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
-      {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
-      ))}
-    </div>
+    <section>
+      <div className='mb-6 flex flex-wrap items-center justify-between gap-4'>
+        <div>
+          <h1 className='text-3xl font-bold text-lime-300'>{title}</h1>
+          <p className='mt-2 text-sm text-gray-400'>현재 페이지</p>
+        </div>
+
+        <div className='flex items-center gap-4'>
+          <button
+            type='button'
+            onClick={goToPrevPage}
+            className='rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20'
+          >
+            {'<'}
+          </button>
+          <span className='text-base font-semibold text-white'>{page}</span>
+          <button
+            type='button'
+            onClick={goToNextPage}
+            className='rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20'
+          >
+            {'>'}
+          </button>
+        </div>
+      </div>
+
+      <div className='grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
+        {movies.map(function (movie) {
+          return <MovieCard key={movie.id} movie={movie} />;
+        })}
+      </div>
+    </section>
   );
 }
