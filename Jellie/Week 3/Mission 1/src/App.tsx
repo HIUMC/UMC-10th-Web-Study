@@ -1,5 +1,5 @@
 import './App.css';
-import { NavLink, Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import MoviePage from './pages/MoviePage';
 import MovieDetailPage from './pages/MovieDetailPage';
@@ -24,41 +24,21 @@ function App() {
         <Route index element={<HomePage />} />
         <Route
           path='popular'
-          element={
-            <MoviePage
-              title='인기 영화'
-              endpoint='popular'
-            />
-          }
+          element={<MoviePage title='인기 영화' endpoint='popular' />}
         />
         <Route
           path='upcoming'
-          element={
-            <MoviePage
-              title='개봉 예정'
-              endpoint='upcoming'
-            />
-          }
+          element={<MoviePage title='개봉 예정' endpoint='upcoming' />}
         />
         <Route
           path='top-rated'
-          element={
-            <MoviePage
-              title='평점 높은 영화'
-              endpoint='top_rated'
-            />
-          }
+          element={<MoviePage title='평점 높은 영화' endpoint='top_rated' />}
         />
         <Route
           path='now-playing'
-          element={
-            <MoviePage
-              title='상영 중'
-              endpoint='now_playing'
-            />
-          }
+          element={<MoviePage title='상영 중' endpoint='now_playing' />}
         />
-        <Route path='movie/:movieId' element={<MovieDetailPage />} />
+        <Route path='movies/:movieId' element={<MovieDetailPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Route>
     </Routes>

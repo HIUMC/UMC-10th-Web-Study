@@ -10,7 +10,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link to={'/movie/' + movie.id}>
+    <Link to={'/movies/' + movie.id}>
       <div
         className='relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-105'
         onMouseEnter={() => setIsHovered(true)}
