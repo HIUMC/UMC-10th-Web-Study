@@ -66,6 +66,7 @@ export default function MoviesPage({ category = "popular" }: MoviesPageProps) {
         <span className="text-white">{page} 페이지</span>
         <button
           onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === 500}
           className="px-4 py-2 bg-green-500 text-white rounded"
         >
           다음
