@@ -8,8 +8,9 @@ interface MovieCardProps {
 
 export default function MovieCard({ movie }: MovieCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  // 컴포넌트 안에서 페이지 이동 할 수 있는 함수를 돌려줌
   const navigate = useNavigate();
-
+  // /movie/${movie.id} , movie.id 값이 문자열 안에 들어가서 URL이 만들어짐
   return (
     <div
       onClick={() => navigate(`/movie/${movie.id}`)}
