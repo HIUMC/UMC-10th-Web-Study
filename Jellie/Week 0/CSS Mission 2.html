@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Mission 2</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+.container{
+
+display:grid;
+
+grid-template-columns: 2fr 1fr 1fr;
+
+grid-template-rows:
+80px
+320px
+220px
+220px
+120px;
+
+grid-template-areas:
+
+"header header header"
+"hero hero hero"
+"main space image"
+"main space extra"
+"footer footer footer";
+
+height:100vh;
+
+}
+
+.header{
+
+grid-area:header;
+
+display:flex;
+
+}
+
+.logo{
+
+flex:1;
+
+background:#0e1a33;
+color:white;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+.menu{
+
+flex:2;
+
+background:#ef3c45;
+color:white;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+.hero{
+
+grid-area:hero;
+
+background:#4f7fb5;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:40px;
+color:white;
+
+}
+
+.main{
+
+grid-area:main;
+
+background:#2c3e55;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:32px;
+color:white;
+
+}
+
+.space{
+
+grid-area:space;
+
+background:white;
+
+}
+
+.image{
+
+grid-area:image;
+
+background:#9dbdc1;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+.extra{
+
+grid-area:extra;
+
+background:#4fb089;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+.footer{
+
+grid-area:footer;
+
+background:#f2c96b;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:32px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="header">
+
+<div class="logo">HEADER</div>
+
+<nav class="menu">MENU</nav>
+
+</header>
+
+
+<section class="hero">HERO</section>
+
+
+<main class="main">MAIN</main>
+
+
+<div class="space"></div>
+
+
+<figure class="image">IMAGE</figure>
+
+
+<aside class="extra">EXTRA</aside>
+
+
+<footer class="footer">BANNER</footer>
+
+
+</div>
+
+</body>
+</html>

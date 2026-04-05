@@ -1,0 +1,59 @@
+.todo {
+  width: 400px;
+  margin: 100px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background: #e5edf4;
+  text-align: center;
+}
+
+.todo__title {
+  margin-bottom: 20px;
+}
+
+.todo__input-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.todo__input {
+  flex: 1;
+  padding: 10px;
+}
+
+.todo__add-btn {
+  background: green;
+  color: white;
+  border: none;
+  padding: 10px;
+}
+
+.todo__lists {
+  display: flex;
+  gap: 20px;
+}
+
+.todo__section {
+  flex: 1;
+}
+
+.todo__item {
+  display: flex;
+  justify-content: space-between;
+  background: #dbe5ee;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.todo__complete-btn {
+  background: green;
+  color: white;
+  border: none;
+}
+
+.todo__delete-btn {
+  background: red;
+  color: white;
+  border: none;
+}

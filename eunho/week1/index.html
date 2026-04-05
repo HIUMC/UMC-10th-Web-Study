@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EUNHO TODO</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- js파일 연결 -->
+  <script type="module" src="./src/script.ts"></script>
+</head>
+<body>
+  <div class="todo__card">
+    <h1>EUNHO TODO</h1>
+    <div class="todo__form">
+      <input class="todo__input" type="text" placeholder="할 일 입력" />
+      <button class="todo__add-btn">할 일 추가</button>
+    </div>
+    <div class="todo__lists">
+      <section class="todo__section">
+        <h2>할 일</h2>
+        <div class="todo__pending"></div>
+      </section>
+      <section class="todo__section">
+        <h2>완료</h2>
+        <div class="todo__done"></div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
