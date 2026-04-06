@@ -6,6 +6,7 @@ import MovieDetailPage from './pages/MovieDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import GoogleCallbackPage from './pages/GoogleCallbackPage';
 import Navbar from './components/Navbar';
 
 function Layout() {
@@ -13,11 +14,21 @@ function Layout() {
   const isHomePage = location.pathname === '/';
   const isLoginPage = location.pathname === '/login';
   const isSignupPage = location.pathname === '/signup';
+  const isGoogleCallbackPage = location.pathname === '/v1/auth/google/callback';
 
   return (
     <div className='min-h-screen bg-neutral-950 text-white'>
       <Navbar />
-      <main className={isHomePage || isLoginPage || isSignupPage ? '' : 'mx-auto max-w-7xl px-6 py-8'}>
+      <main
+        className={
+          isHomePage ||
+          isLoginPage ||
+          isSignupPage ||
+          isGoogleCallbackPage
+            ? ''
+            : 'mx-auto max-w-7xl px-6 py-8'
+        }
+      >
         <Outlet />
       </main>
     </div>
@@ -31,6 +42,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path='login' element={<LoginPage />} />
         <Route path='signup' element={<SignupPage />} />
+        <Route path='v1/auth/google/callback' element={<GoogleCallbackPage />} />
         <Route
           path='popular'
           element={<MoviePage title='인기 영화' endpoint='popular' />}

@@ -5,13 +5,16 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { signupSchema, type SignupFormValues } from '../schemas/auth';
+import { signUp, uploadPublicImage } from '../lib/api';
 
 export default function SignupPage() {
   const navigate = useNavigate();
   const [, setStoredAuth] = useLocalStorage('auth', {
+    id: 0,
+    name: '',
     email: '',
-    token: '',
-    nickname: '',
+    accessToken: '',
+    refreshToken: '',
     profileImage: '',
     isLoggedIn: false,
   });
@@ -22,13 +25,15 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [profilePreview, setProfilePreview] = useState('');
+  const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
     trigger,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
@@ -61,20 +66,35 @@ export default function SignupPage() {
     }
   };
 
-  const onSubmit = function (data: SignupFormValues) {
-    setStoredAuth({
-      email: data.email,
-      token: 'mock-signup-token',
-      nickname: data.nickname,
-      profileImage: profilePreview,
-      isLoggedIn: true,
-    });
+  const onSubmit = async function (data: SignupFormValues) {
+    try {
+      const signupResult = await signUp({
+        name: data.nickname,
+        email: data.email,
+        password: data.password,
+        avatar: uploadedImageUrl || null,
+        bio: null,
+      });
 
-    alert('회원가입 완료');
-    navigate('/');
+      setStoredAuth({
+        id: signupResult.id,
+        name: signupResult.name,
+        email: signupResult.email,
+        accessToken: '',
+        refreshToken: '',
+        profileImage: signupResult.avatar || '',
+        isLoggedIn: true,
+      });
+
+      alert('회원가입 완료');
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      alert('회원가입에 실패했습니다.');
+    }
   };
 
-  const handleProfileChange = function (
+  const handleProfileChange = async function (
     event: React.ChangeEvent<HTMLInputElement>
   ) {
     const file = event.target.files?.[0];
@@ -92,6 +112,17 @@ export default function SignupPage() {
     };
 
     reader.readAsDataURL(file);
+
+    try {
+      setIsUploading(true);
+      const imageUrl = await uploadPublicImage(file);
+      setUploadedImageUrl(imageUrl);
+    } catch (error) {
+      console.error(error);
+      alert('프로필 이미지 업로드에 실패했습니다.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -121,9 +152,16 @@ export default function SignupPage() {
             <>
               <button
                 type='button'
+                onClick={function () {
+                  window.location.href = 'http://localhost:8000/v1/auth/google/login';
+                }}
                 className='flex w-full items-center justify-center gap-3 rounded-md border border-white/40 bg-white px-4 py-3 font-semibold text-black transition hover:bg-white/90'
               >
-                <img src={googleLogo} alt='구글 로고' className='h-5 w-5 object-contain' />
+                <img
+                  src={googleLogo}
+                  alt='구글 로고'
+                  className='h-5 w-5 object-contain'
+                />
                 구글로 회원가입
               </button>
 
@@ -272,6 +310,12 @@ export default function SignupPage() {
                 />
               </div>
 
+              {isUploading ? (
+                <p className='text-center text-sm text-lime-300'>
+                  이미지 업로드 중...
+                </p>
+              ) : null}
+
               <div>
                 <input
                   type='text'
@@ -286,15 +330,15 @@ export default function SignupPage() {
 
               <button
                 type='submit'
-                disabled={!nickname || !isValid}
+                disabled={!nickname || !isValid || isSubmitting || isUploading}
                 className={
                   'w-full rounded-md px-4 py-3 font-semibold transition ' +
-                  (nickname && isValid
+                  (nickname && isValid && !isSubmitting && !isUploading
                     ? 'bg-lime-400 text-black hover:bg-lime-300'
                     : 'cursor-not-allowed bg-white/10 text-white/40')
                 }
               >
-                회원가입 완료
+                {isSubmitting ? '회원가입 중...' : '회원가입 완료'}
               </button>
             </>
           ) : null}

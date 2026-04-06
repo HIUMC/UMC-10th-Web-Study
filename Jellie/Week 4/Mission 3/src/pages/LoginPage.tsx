@@ -4,19 +4,23 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginFormValues } from '../schemas/auth';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { signIn } from '../lib/api';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [, setStoredAuth] = useLocalStorage('auth', {
+    id: 0,
+    name: '',
     email: '',
-    token: '',
+    accessToken: '',
+    refreshToken: '',
     isLoggedIn: false,
   });
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     mode: 'onChange',
@@ -26,15 +30,25 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = function (data: LoginFormValues) {
-    setStoredAuth({
-      email: data.email,
-      token: 'mock-login-token',
-      isLoggedIn: true,
-    });
+  const onSubmit = async function (data: LoginFormValues) {
+    try {
+      const result = await signIn(data.email, data.password);
 
-    alert('로그인 성공');
-    navigate('/');
+      setStoredAuth({
+        id: result.id,
+        name: result.name,
+        email: data.email,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        isLoggedIn: true,
+      });
+
+      alert('로그인 성공');
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      alert('로그인에 실패했습니다.');
+    }
   };
 
   return (
@@ -55,9 +69,16 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <button
             type='button'
+            onClick={function () {
+              window.location.href = 'http://localhost:8000/v1/auth/google/login';
+            }}
             className='flex w-full items-center justify-center gap-3 rounded-md border border-white/40 bg-white px-4 py-3 font-semibold text-black transition hover:bg-white/90'
           >
-            <img src={googleLogo} alt='구글 로고' className='h-5 w-5 object-contain' />
+            <img
+              src={googleLogo}
+              alt='구글 로고'
+              className='h-5 w-5 object-contain'
+            />
             구글로 로그인
           </button>
 
@@ -93,15 +114,15 @@ export default function LoginPage() {
 
           <button
             type='submit'
-            disabled={!isValid}
+            disabled={!isValid || isSubmitting}
             className={
               'w-full rounded-md px-4 py-3 font-semibold transition ' +
-              (isValid
+              (isValid && !isSubmitting
                 ? 'bg-lime-400 text-black hover:bg-lime-300'
                 : 'cursor-not-allowed bg-white/10 text-white/40')
             }
           >
-            로그인
+            {isSubmitting ? '로그인 중...' : '로그인'}
           </button>
         </form>
       </div>
