@@ -16,11 +16,15 @@ export default function MoviePage() {
   }>();
 
   useEffect(() => {
+    setPage(1);
+  }, [category]);
+
+  useEffect(() => {
     const fetchMovies = async () => {
       setIsPending(true);
       try {
         const { data } = await axios.get<MovieResponse>(
-          `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=${page}`,
+          `https://api.themoviedb.org/3/movie/${category}?language=ko-KR&page=${page}`,
           {
             headers: {
               Authorization: `Bearer ${import.meta.env.VITE_TMDB_KEY}`,
