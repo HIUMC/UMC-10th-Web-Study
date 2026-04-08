@@ -1,4 +1,4 @@
-import '../style.css';
+import './style.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import DoneList from './components/DoneList';
