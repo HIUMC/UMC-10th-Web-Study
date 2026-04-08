@@ -1,20 +1,42 @@
 import { useNavigate } from 'react-router-dom';
-import useForm from '../hooks/useForm';
-import { validateSignIn } from '../utils/validator';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { postSignIn } from '../apis/auth';
+import useLocalStorage from '../hooks/useLocalStorage';
+import { LOCAL_STORAGE_KEY } from '../apis/axios';
+
+const loginSchema = z.object({
+  email: z.string().email('유효하지 않은 이메일 형식입니다.'),
+  password: z
+    .string()
+    .min(6, '비밀번호는 최소 6자 이상이어야 합니다.')
+    .max(20, '비밀번호는 최대 20자 이하여야 합니다.'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { values, errors, touched, getInputProps } = useForm({
-    initialValues: { email: '', password: '' },
-    validate: validateSignIn,
+  const { setItem } = useLocalStorage();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
   });
 
-  const isDisabled =
-    Object.keys(errors).length > 0 || !values.email || !values.password;
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    console.log('로그인 시도:', values);
+  async function onSubmit(data: LoginFormData) {
+    try {
+      const response = await postSignIn(data);
+      setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, response.data.accessToken);
+      navigate('/');
+    } catch (error) {
+      console.error('로그인 실패:', error);
+    }
   }
 
   return (
@@ -49,36 +71,36 @@ function LoginPage() {
         </div>
 
         {/* 폼 */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
           <div>
             <input
+              {...register('email')}
               type="email"
               placeholder="이메일을 입력해주세요!"
-              {...getInputProps('email')}
               className={`w-full px-4 py-3 rounded border text-white text-sm outline-none bg-[#1a1a1a] placeholder-gray-500
-                ${touched.email && errors.email ? 'border-red-500 bg-red-950' : 'border-gray-600 focus:border-pink-500'}`}
+                ${errors.email ? 'border-red-500 bg-red-950' : 'border-gray-600 focus:border-yellow-500'}`}
             />
-            {touched.email && errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
             )}
           </div>
 
           <div>
             <input
+              {...register('password')}
               type="password"
               placeholder="비밀번호를 입력해주세요!"
-              {...getInputProps('password')}
               className={`w-full px-4 py-3 rounded border text-white text-sm outline-none bg-[#1a1a1a] placeholder-gray-500
-                ${touched.password && errors.password ? 'border-red-500 bg-red-950' : 'border-gray-600 focus:border-pink-500'}`}
+                ${errors.password ? 'border-red-500 bg-red-950' : 'border-gray-600 focus:border-yellow-500'}`}
             />
-            {touched.password && errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
             )}
           </div>
 
           <button
             type="submit"
-            disabled={isDisabled}
+            disabled={!isValid || isSubmitting}
             className="w-full py-3 rounded text-white text-sm font-medium
               bg-gray-700 hover:bg-gray-600
               disabled:opacity-50 disabled:cursor-not-allowed"
