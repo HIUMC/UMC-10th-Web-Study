@@ -1,11 +1,12 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
+import AuthLoginPage from './pages/AuthLoginPage';
 import MovieDetailPage from './pages/MovieDetailPage';
 import MoviesPage from './pages/MoviesPage';
 import NotFoundPage from './pages/NotFoundPage';
+import SignupPage from './pages/SignupPage';
+import StartPage from './pages/StartPage';
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LandingPage />,
+        element: <StartPage />,
       },
       {
         path: 'movies/:category',
@@ -29,7 +30,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: <AuthLoginPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignupPage />,
   },
 ]);
 

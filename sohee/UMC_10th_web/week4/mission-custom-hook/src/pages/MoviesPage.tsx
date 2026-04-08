@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MovieCard from '../components/MovieCard';
@@ -6,13 +6,12 @@ import useCustomFetch from '../hooks/useCustomFetch';
 import { getCategoryMeta, getMovieListUrl } from '../lib/tmdb';
 import type { MovieResponse } from '../types/movie';
 
-const MoviesPage = () => {
-  const { category = 'popular' } = useParams<{ category: string }>();
-  const [page, setPage] = useState(1);
+type MoviesPageContentProps = {
+  category: string;
+};
 
-  useEffect(() => {
-    setPage(1);
-  }, [category]);
+const MoviesPageContent = ({ category }: MoviesPageContentProps) => {
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useCustomFetch<MovieResponse>(
     getMovieListUrl(category, page),
@@ -92,6 +91,12 @@ const MoviesPage = () => {
       )}
     </section>
   );
+};
+
+const MoviesPage = () => {
+  const { category = 'popular' } = useParams<{ category: string }>();
+
+  return <MoviesPageContent key={category} category={category} />;
 };
 
 export default MoviesPage;
