@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import type { MovieDetail, Credits, CrewMember } from '../types/movie';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import { useCustomFetch } from '../hooks/useCustomFetch';
 
 const IMAGE_BASE = 'https://image.tmdb.org/t/p';
 const API_HEADERS = {
@@ -13,39 +12,17 @@ const API_HEADERS = {
 export default function MovieDetailPage() {
   const { movieId } = useParams<{ movieId: string }>();
 
-  const [movie, setMovie] = useState<MovieDetail | null>(null);
-  const [credits, setCredits] = useState<Credits | null>(null);
-  const [isPending, setIsPending] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const { data: movie, isPending: moviePending, isError: movieError } = useCustomFetch<MovieDetail>(
+    `https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`,
+    API_HEADERS,
+  );
+  const { data: credits, isPending: creditsPending, isError: creditsError } = useCustomFetch<Credits>(
+    `https://api.themoviedb.org/3/movie/${movieId}/credits?language=ko-KR`,
+    API_HEADERS,
+  );
 
-  useEffect(() => {
-    if (!movieId) return;
-
-    const fetchDetail = async () => {
-      setIsPending(true);
-      setIsError(false);
-      try {
-        const [movieRes, creditsRes] = await Promise.all([
-          axios.get<MovieDetail>(
-            `https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`,
-            { headers: API_HEADERS },
-          ),
-          axios.get<Credits>(
-            `https://api.themoviedb.org/3/movie/${movieId}/credits?language=ko-KR`,
-            { headers: API_HEADERS },
-          ),
-        ]);
-        setMovie(movieRes.data);
-        setCredits(creditsRes.data);
-      } catch {
-        setIsError(true);
-      } finally {
-        setIsPending(false);
-      }
-    };
-
-    fetchDetail();
-  }, [movieId]);
+  const isPending = moviePending || creditsPending;
+  const isError = movieError || creditsError;
 
   if (isPending) {
     return (
