@@ -20,6 +20,12 @@ const LandingPage = () => {
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            to="/login"
+            className="rounded-full border border-amber-300/50 bg-amber-300/10 px-5 py-3 text-sm font-bold text-amber-200 transition hover:border-amber-200 hover:bg-amber-300/20"
+          >
+            로그인하러 가기
+          </Link>
           {movieCategories.map(({ key, label }) => (
             <Link
               key={key}
