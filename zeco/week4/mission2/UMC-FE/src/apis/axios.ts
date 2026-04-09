@@ -5,7 +5,8 @@ const LOCAL_STORAGE_KEY = {
 } as const;
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_API_URL,
+  baseURL: 'http://localhost:8000',
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use((config) => {
