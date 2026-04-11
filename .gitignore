@@ -1,7 +1,8 @@
-﻿node_modules/
+node_modules/
 dist/
 .DS_Store
 settings.local.json
 .env
 .env.local
 .env.*.local
+.vscode/

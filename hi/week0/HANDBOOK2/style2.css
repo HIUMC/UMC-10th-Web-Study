@@ -1,0 +1,11 @@
+.box {
+  width: 150px;
+  height: 150px;
+  background: pink;
+  transform: rotate(45deg);
+  transition: background 0.3s ease;
+}
+
+.box:hover {
+  background: purple;
+}

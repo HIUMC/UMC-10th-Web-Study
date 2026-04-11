@@ -1,0 +1,163 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.layout {
+  width: 100%;
+  min-width: 320px;
+}
+
+.layout__header {
+  display: flex;
+  height: 88px;
+}
+
+.layout__logo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #111628;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.layout__nav {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dc4c52;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.layout__hero {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5a85c1;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.layout__content {
+  display: grid;
+  grid-template-columns: 3fr 1fr 2fr;
+  height: 380px;
+}
+
+.layout__main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #273449;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.layout__gap {
+  background-color: #ffffff;
+}
+
+.layout__sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout__image {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c8e3e5;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.layout__extra {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3cb87a;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.layout__banner {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8d378;
+  color: #111111;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .layout__header {
+    height: auto;
+  }
+
+  .layout__logo,
+  .layout__nav {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  .layout__hero {
+    height: 180px;
+  }
+
+  .layout__content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .layout__main {
+    height: 200px;
+  }
+
+  .layout__gap {
+    display: none;
+  }
+
+  .layout__sidebar {
+    flex-direction: row;
+    height: 120px;
+  }
+
+  .layout__image,
+  .layout__extra {
+    flex: 1;
+  }
+
+  .layout__banner {
+    height: 80px;
+  }
+}

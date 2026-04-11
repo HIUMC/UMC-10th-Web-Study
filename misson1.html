@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang = "ko">
+<head>
+  <style>
+    * {
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    /* 블록 */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border: 3px solid black;
+      border-radius: 50px;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+
+    /* 요소 */
+    .navbar__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .navbar__logo-image {
+      width: 50px;
+      height: 50px;
+      background-color: tomato;
+      border-radius: 12px;
+    }
+
+    .navbar__logo-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar__menu {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .navbar__menu-item {
+      color: gray;
+      cursor: pointer;
+    }
+
+    /* 수정자 */
+    .navbar__menu-item--active {
+      color: tomato;
+      font-weight: bold;
+    }
+
+    .navbar__lang {
+      display: flex;
+      align-items: center;
+      border: 2px solid black;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .navbar__lang-btn {
+      padding: 5px 15px;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    /* 수정자 */
+    .navbar__lang-btn--active {
+      background-color: tomato;
+      color: white;
+      border-radius: 50px;
+    }
+
+  
+    @media (max-width: 600px) {
+    .navbar__menu {
+        display: none; 
+    }
+}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+
+    <div class="navbar__logo">
+      <div class="navbar__logo-image"></div>
+      <span class="navbar__logo-text">Aido</span>
+    </div>
+
+    <ul class="navbar__menu">
+      <li class="navbar__menu-item">고양이 친구들</li>
+      <li class="navbar__menu-item navbar__menu-item--active">앱 다운로드</li>
+    </ul>
+
+    <div class="navbar__lang">
+      <button class="navbar__lang-btn navbar__lang-btn--active">KO</button>
+      <button class="navbar__lang-btn">EN</button>
+    </div>
+
+  </nav>
+</body>
+</html>

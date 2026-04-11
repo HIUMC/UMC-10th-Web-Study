@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미션 2 - 레이아웃</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      font-weight: bold;
+      color: white;
+    }
+
+
+    .layout__header {
+      display: flex;
+      height: 120px;
+    }
+
+    .layout__header-logo {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+      background-color: #0d1117;
+      width: 25%;
+      font-size: 24px;
+    }
+
+    .layout__header-menu {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e84a5f;
+      width: 75%;
+      font-size: 24px;
+    }
+
+  
+    .layout__hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #4a78c4;
+      height: 350px;
+      font-size: 28px;
+    }
+
+    .layout__content {
+      display: grid;
+      grid-template-columns: 1fr 0.5fr 0.75fr;
+      grid-template-rows: 1fr 1fr;
+      height: 400px;
+    }
+
+    .layout__main {
+      grid-row: 1 / 3; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1e2d40;
+      font-size: 24px;
+    }
+
+    .layout__blank {
+      grid-row: 1 / 3; 
+      background-color: white;
+    }
+
+    .layout__image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #a8d8d8;
+      color: #222;
+      font-size: 20px;
+    }
+
+    .layout__extra {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #3dba8a;
+      color: #222;
+      font-size: 20px;
+    }
+
+  
+    .layout__banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f7c948;
+      color: #222;
+      height: 120px;
+      font-size: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  
+  <header class="layout__header">
+    <div class="layout__header-logo">HEADER</div>
+    <div class="layout__header-menu">MENU</div>
+  </header>
+
+  
+  <section class="layout__hero">HERO</section>
+
+  
+  <div class="layout__content">
+    <div class="layout__main">MAIN</div>
+    <div class="layout__blank"></div>
+    <div class="layout__image">IMAGE</div>
+    <div class="layout__extra">EXTRA</div>
+  </div>
+
+  
+  <footer class="layout__banner">BANNER</footer>
+
+</body>
+</html>

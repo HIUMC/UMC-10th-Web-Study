@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>미션 2 - 레이아웃 구현</title>
+    <style>
+        /* 기본 초기화 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: white;
+            font-family: sans-serif;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* 1. 전체 레이아웃 (Grid 활용) */
+        .container {
+            display: grid;
+            width: 100vw;
+            height: 100vh;
+            /* 행(Row) 구성: 헤더(80px), 히어로(35%), 메인(40%), 배너(10%) */
+            grid-template-rows: 80px 0.35fr 0.4fr 0.1fr;
+            /* 열(Column) 구성: 왼쪽(MAIN), 중간(공백), 오른쪽(IMAGE/EXTRA) */
+            grid-template-columns: 1fr 0.5fr 1fr;
+            grid-template-areas: 
+                "header header header"
+                "hero hero hero"
+                "main empty side"
+                "banner banner banner";
+        }
+
+        /* 공통 스타일: 내부 텍스트 중앙 정렬 (Flex 활용) */
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 2. 각 구역 스타일링 */
+        .header-wrapper {
+            grid-area: header;
+            display: flex; /* 헤더와 메뉴를 가로로 배치 */
+        }
+        .header { width: 25%; background-color: #1a2238; }
+        .menu { flex-grow: 1; background-color: #d9534f; }
+
+        .hero {
+            grid-area: hero;
+            background-color: #6a89cc;
+        }
+
+        .main {
+            grid-area: main;
+            background-color: #2c3e50;
+        }
+
+        .empty-space {
+            grid-area: empty;
+            background-color: white; /* 미션 조건: 흰색 배경은 공백 */
+        }
+
+        /* 오른쪽 사이드 영역 (IMAGE와 EXTRA를 세로로 나눔) */
+        .side-content {
+            grid-area: side;
+            display: flex;
+            flex-direction: column;
+        }
+        .image { flex: 1; background-color: #cfdee3; color: black; }
+        .extra { flex: 1; background-color: #78bc9b; color: black; }
+
+        .banner {
+            grid-area: banner;
+            background-color: #f3d078;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header-wrapper">
+            <div class="header box">HEADER</div>
+            <div class="menu box">MENU</div>
+        </header>
+
+        <section class="hero box">HERO</section>
+
+        <main class="main box">MAIN</main>
+
+        <div class="empty-space"></div>
+
+        <aside class="side-content">
+            <div class="image box">IMAGE</div>
+            <div class="extra box">EXTRA</div>
+        </aside>
+
+        <footer class="banner box">BANNER</footer>
+    </div>
+
+</body>
+</html>
