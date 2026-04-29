@@ -23,6 +23,7 @@ export type RequestSignInDto = {
 
 export type ResponseSignInDto = {
   accessToken: string;
+  refreshToken: string;
 };
 
 export type ResponseMyInfo = {
