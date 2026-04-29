@@ -53,7 +53,12 @@ function LoginPage() {
         </div>
 
         {/* 구글 로그인 */}
-        <button className="flex items-center justify-center gap-3 w-full py-3 border border-gray-600 rounded text-white hover:bg-gray-800 bg-[#1a1a1a]">
+        <button
+          onClick={() => {
+            window.location.href = `${import.meta.env.VITE_SERVER_API_URL}/v1/auth/google/login`;
+          }}
+          className="flex items-center justify-center gap-3 w-full py-3 border border-gray-600 rounded text-white hover:bg-gray-800 bg-[#1a1a1a]"
+        >
           <img
             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
             alt="Google"

@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import MyPage from './pages/MyPage';
 import NotFoundPage from './pages/NotFoundPage';
+import GoogleLoginResultPage from './pages/GoogleLoginResultPage';
 
 const publicRoutes = [
   {
@@ -16,6 +17,7 @@ const publicRoutes = [
       { path: '/', element: <HomePage /> },
       { path: '/login', element: <LoginPage /> },
       { path: '/signup', element: <SignUpPage /> },
+      { path: '/v1/auth/google/callback', element: <GoogleLoginResultPage /> },
     ],
   },
 ];
