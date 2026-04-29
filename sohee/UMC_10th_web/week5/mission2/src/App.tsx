@@ -8,6 +8,7 @@ import NotFoundPage from "./pages/NotFoundPage.tsx";
 import { AuthProvider } from "./context/AuthProvider";
 import ProtectedLayout from "./layouts/ProtectedLayout.tsx";
 import MyPage from "./pages/MyPage.tsx";
+import GoogleCallbackPage from "./pages/GoogleCallbackPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "signup", element: <SignupPage /> },
+      { path: "oauth/google/callback", element: <GoogleCallbackPage /> },
       {
         element: <ProtectedLayout />,
         children: [{ path: "my", element: <MyPage /> }],

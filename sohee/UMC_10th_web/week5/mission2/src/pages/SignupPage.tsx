@@ -9,14 +9,14 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { postSignup } from "../apis/auth";
 import { toast } from "react-hot-toast";
 
+const API_BASE_URL = "http://localhost:8000";
+
 const SignupPage = () => {
   const navigate = useNavigate();
-
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordCheck, setShowPasswordCheck] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const { setItem } = useLocalStorage("user");
 
   const {
@@ -40,15 +40,10 @@ const SignupPage = () => {
   const passwordCheck = watch("passwordCheck");
   const nickname = watch("nickname");
 
-  const isStep1Valid = email.trim() !== "" && !errors.email;
-
-  const isStep2Valid =
-    password.trim() !== "" &&
-    passwordCheck.trim() !== "" &&
-    !errors.password &&
-    !errors.passwordCheck;
-
-  const isStep3Valid = nickname.trim() !== "" && !errors.nickname;
+  const handleGoogleLogin = () => {
+    const origin = encodeURIComponent(window.location.origin);
+    window.location.assign(`${API_BASE_URL}/v1/auth/google?origin=${origin}`);
+  };
 
   const handleBack = () => {
     if (step === 3) return setStep(2);
@@ -57,24 +52,18 @@ const SignupPage = () => {
   };
 
   const handleNextFromEmail = async () => {
-    const isValid = await trigger("email");
-    if (isValid) setStep(2);
+    if (await trigger("email")) setStep(2);
   };
 
   const handleNextFromPassword = async () => {
-    const isValid = await trigger(["password", "passwordCheck"]);
-    if (isValid) setStep(3);
+    if (await trigger(["password", "passwordCheck"])) setStep(3);
   };
 
-  // ✅ 핵심 수정 부분
   const handleCompleteSignup = async () => {
-    const isValid = await trigger("nickname");
-
-    if (!isValid) return;
+    if (!(await trigger("nickname"))) return;
 
     try {
       setIsSubmitting(true);
-
       await postSignup({
         email,
         password,
@@ -82,20 +71,24 @@ const SignupPage = () => {
         name: nickname,
       });
 
-      setItem({
-        email,
-        nickname,
-      });
-
-      toast.success("회원가입 성공");
+      setItem({ email, nickname });
+      toast.success("Signup complete");
       navigate("/login");
     } catch (error) {
-      console.log("회원가입 오류", error);
-      toast.error("회원가입에 실패했습니다. 입력값을 다시 확인해주세요.");
+      console.log("Signup error", error);
+      toast.error("Signup failed. Please check your information.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const isStep1Valid = email.trim() !== "" && !errors.email;
+  const isStep2Valid =
+    password.trim() !== "" &&
+    passwordCheck.trim() !== "" &&
+    !errors.password &&
+    !errors.passwordCheck;
+  const isStep3Valid = nickname.trim() !== "" && !errors.nickname;
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -103,19 +96,25 @@ const SignupPage = () => {
         <div className="w-full max-w-xs">
           <div className="relative mb-8 flex items-center justify-center">
             <button
+              type="button"
               onClick={handleBack}
               className="absolute left-0 text-2xl text-white hover:text-gray-300"
+              aria-label="Go back"
             >
               <IoChevronBack />
             </button>
-            <h2 className="text-3xl font-bold">회원가입</h2>
+            <h2 className="text-3xl font-bold">Sign up</h2>
           </div>
 
           {step === 1 && (
             <>
-              <button className="relative mb-6 flex w-full items-center justify-center rounded border border-white/40 bg-black px-4 py-3 text-base font-medium text-white hover:bg-white/5">
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="relative mb-6 flex w-full items-center justify-center rounded border border-white/40 bg-black px-4 py-3 text-base font-medium text-white hover:bg-white/5"
+              >
                 <FcGoogle className="absolute left-4 text-2xl" />
-                구글 로그인
+                Continue with Google
               </button>
 
               <div className="mb-6 flex items-center gap-4">
@@ -126,7 +125,7 @@ const SignupPage = () => {
 
               <input
                 type="email"
-                placeholder="이메일을 입력해주세요!"
+                placeholder="Enter your email"
                 {...register("email")}
                 className={`mb-2 w-full rounded border bg-zinc-900 px-4 py-3 text-white placeholder:text-gray-400 outline-none ${
                   errors.email
@@ -151,22 +150,21 @@ const SignupPage = () => {
                     : "bg-zinc-900 text-gray-400"
                 }`}
               >
-                다음
+                Next
               </button>
             </>
           )}
 
           {step === 2 && (
             <>
-              <div className="mb-4 flex items-center gap-2 rounded border border-white/20 bg-zinc-900 px-3 py-2 text-sm text-white">
-                <span>✉</span>
-                <span>{email}</span>
+              <div className="mb-4 rounded border border-white/20 bg-zinc-900 px-3 py-2 text-sm text-white">
+                {email}
               </div>
 
               <div className="relative mb-2">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="비밀번호를 입력해주세요!"
+                  placeholder="Enter your password"
                   {...register("password")}
                   className={`w-full rounded border bg-zinc-900 px-4 py-3 pr-12 text-white placeholder:text-gray-400 outline-none ${
                     errors.password
@@ -178,6 +176,7 @@ const SignupPage = () => {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-gray-400 hover:text-white"
+                  aria-label="Toggle password visibility"
                 >
                   {showPassword ? <IoEye /> : <IoEyeOff />}
                 </button>
@@ -193,7 +192,7 @@ const SignupPage = () => {
               <div className="relative mb-2">
                 <input
                   type={showPasswordCheck ? "text" : "password"}
-                  placeholder="비밀번호를 다시 한 번 입력해주세요!"
+                  placeholder="Confirm your password"
                   {...register("passwordCheck")}
                   className={`w-full rounded border bg-zinc-900 px-4 py-3 pr-12 text-white placeholder:text-gray-400 outline-none ${
                     errors.passwordCheck
@@ -205,6 +204,7 @@ const SignupPage = () => {
                   type="button"
                   onClick={() => setShowPasswordCheck((prev) => !prev)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-gray-400 hover:text-white"
+                  aria-label="Toggle password confirmation visibility"
                 >
                   {showPasswordCheck ? <IoEye /> : <IoEyeOff />}
                 </button>
@@ -227,24 +227,16 @@ const SignupPage = () => {
                     : "bg-zinc-900 text-gray-400"
                 }`}
               >
-                다음
+                Next
               </button>
             </>
           )}
 
           {step === 3 && (
             <>
-              <div className="mb-6 flex justify-center">
-                <img
-                  src="/profile.jpg"
-                  alt="기본 프로필"
-                  className="h-32 w-32 rounded-full object-cover"
-                />
-              </div>
-
               <input
                 type="text"
-                placeholder="닉네임을 입력해주세요!"
+                placeholder="Enter your nickname"
                 {...register("nickname")}
                 className={`mb-2 w-full rounded border bg-zinc-900 px-4 py-3 text-white placeholder:text-gray-400 outline-none ${
                   errors.nickname
@@ -270,7 +262,7 @@ const SignupPage = () => {
                     : "bg-zinc-900 text-gray-400"
                 }`}
               >
-                {isSubmitting ? "처리 중..." : "회원가입 완료"}
+                {isSubmitting ? "Submitting..." : "Complete signup"}
               </button>
             </>
           )}
