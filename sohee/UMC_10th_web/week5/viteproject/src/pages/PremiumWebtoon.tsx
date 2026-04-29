@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 
 const PremiumWebtoon: React.FC = () => {
-  const { logout } = useAuth();
+  const { logout, userEmail } = useAuth();
 
   return (
     <div style={{ padding: '20px' }}>

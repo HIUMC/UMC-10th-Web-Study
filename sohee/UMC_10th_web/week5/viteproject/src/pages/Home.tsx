@@ -3,11 +3,16 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const Home: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userEmail } = useAuth();
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>웹툰 플랫폼</h1>
+      {isAuthenticated && (
+        <p style={{ color: '#2c3e50' }}>
+          환영합니다, <strong>{userEmail}</strong>님!
+        </p>
+      )}
 
       <div style={{ margin: '20px 0' }}>
         <h2>무료 웹툰</h2>

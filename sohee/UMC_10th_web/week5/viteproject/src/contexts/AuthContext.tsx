@@ -6,27 +6,27 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  // 초기 상태를 localStorage에서 가져옴
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    const token = localStorage.getItem('token');
-    return token ? true : false;
+  const AUTH_EMAIL_KEY = 'authUserEmail';
+
+  const [userEmail, setUserEmail] = useState<string | null>(() => {
+    return localStorage.getItem(AUTH_EMAIL_KEY);
   });
 
-  const login = (token: string) => {
-    // 실제로는 토큰을 로컬 스토리지에 저장하고 검증하는 로직이 들어감
-    localStorage.setItem('token', token);
-    setIsAuthenticated(true);
+  const isAuthenticated = Boolean(userEmail);
+
+  const login = (email: string, _password: string) => {
+    void _password;
+    localStorage.setItem(AUTH_EMAIL_KEY, email);
+    setUserEmail(email);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
+    localStorage.removeItem(AUTH_EMAIL_KEY);
+    setUserEmail(null);
   };
 
-  // useEffect 제거 - 초기 상태에서 처리
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userEmail, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

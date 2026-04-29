@@ -3,53 +3,65 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const Login: React.FC = () => {
-  const [token, setToken] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 로그인 후 돌아갈 페이지 (state에서 가져옴)
   const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (token.trim()) {
-      login(token);
-      navigate(from, { replace: true });
-    }
+    if (!email.trim()) return;
+
+    login(email.trim(), password);
+    navigate(from, { replace: true });
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
-      <h2>로그인</h2>
+    <div style={{ padding: '20px', maxWidth: '420px', margin: '0 auto' }}>
+      <h2>이메일 로그인</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="token">토큰 입력:</label>
+        <div style={{ marginBottom: '12px' }}>
+          <label htmlFor="email">이메일:</label>
           <input
-            id="token"
-            type="text"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            placeholder="인증 토큰을 입력하세요"
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@domain.com"
+            style={{ width: '100%', padding: '10px', marginTop: '6px' }}
+          />
+        </div>
+        <div style={{ marginBottom: '16px' }}>
+          <label htmlFor="password">비밀번호:</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력하세요"
+            style={{ width: '100%', padding: '10px', marginTop: '6px' }}
           />
         </div>
         <button
           type="submit"
           style={{
-            padding: '10px 20px',
+            width: '100%',
+            padding: '12px',
             backgroundColor: '#007bff',
             color: 'white',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: '6px',
             cursor: 'pointer'
           }}
         >
           로그인
         </button>
       </form>
-      <p style={{ marginTop: '20px', fontSize: '14px', color: '#666' }}>
-        <strong>테스트용 토큰:</strong> test-token-123
+      <p style={{ marginTop: '18px', fontSize: '14px', color: '#666' }}>
+        <strong>테스트 계정:</strong> example@domain.com / password
       </p>
     </div>
   );
