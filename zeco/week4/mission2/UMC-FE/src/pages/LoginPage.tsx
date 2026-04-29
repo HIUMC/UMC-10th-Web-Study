@@ -1,10 +1,10 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { postSignIn } from '../apis/auth';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { LOCAL_STORAGE_KEY } from '../apis/axios';
+import { useAuth } from '../context/AuthContext';
+import type { RequestSignInDto } from '../types/auth';
 
 const loginSchema = z.object({
   email: z.string().email('유효하지 않은 이메일 형식입니다.'),
@@ -18,7 +18,11 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setItem } = useLocalStorage();
+  const { login, accessToken } = useAuth();
+
+  useEffect(() => {
+    if (accessToken) navigate('/');
+  }, [accessToken, navigate]);
 
   const {
     register,
@@ -29,14 +33,9 @@ function LoginPage() {
     mode: 'onChange',
   });
 
-  async function onSubmit(data: LoginFormData) {
-    try {
-      const response = await postSignIn(data);
-      setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, response.data.accessToken);
-      navigate('/');
-    } catch (error) {
-      console.error('로그인 실패:', error);
-    }
+  async function onSubmit(data: RequestSignInDto) {
+    await login(data);
+    navigate('/my');
   }
 
   return (
@@ -54,7 +53,12 @@ function LoginPage() {
         </div>
 
         {/* 구글 로그인 */}
-        <button className="flex items-center justify-center gap-3 w-full py-3 border border-gray-600 rounded text-white hover:bg-gray-800 bg-[#1a1a1a]">
+        <button
+          onClick={() => {
+            window.location.href = `${import.meta.env.VITE_SERVER_API_URL}/v1/auth/google/login`;
+          }}
+          className="flex items-center justify-center gap-3 w-full py-3 border border-gray-600 rounded text-white hover:bg-gray-800 bg-[#1a1a1a]"
+        >
           <img
             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
             alt="Google"
