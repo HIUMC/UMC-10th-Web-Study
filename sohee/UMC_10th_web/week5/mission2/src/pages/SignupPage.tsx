@@ -1,0 +1,275 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FcGoogle } from "react-icons/fc";
+import { IoChevronBack, IoEye, IoEyeOff } from "react-icons/io5";
+import { signupSchema, type SignupFormValues } from "../utils/schema";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { postSignup } from "../apis/auth";
+import { toast } from "react-hot-toast";
+
+const API_BASE_URL = "http://localhost:8000";
+
+const SignupPage = () => {
+  const navigate = useNavigate();
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setItem } = useLocalStorage("user");
+
+  const {
+    register,
+    watch,
+    trigger,
+    formState: { errors, touchedFields },
+  } = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+      passwordCheck: "",
+      nickname: "",
+    },
+  });
+
+  const email = watch("email");
+  const password = watch("password");
+  const passwordCheck = watch("passwordCheck");
+  const nickname = watch("nickname");
+
+  const handleGoogleLogin = () => {
+    const origin = encodeURIComponent(window.location.origin);
+    window.location.assign(`${API_BASE_URL}/v1/auth/google?origin=${origin}`);
+  };
+
+  const handleBack = () => {
+    if (step === 3) return setStep(2);
+    if (step === 2) return setStep(1);
+    navigate("/");
+  };
+
+  const handleNextFromEmail = async () => {
+    if (await trigger("email")) setStep(2);
+  };
+
+  const handleNextFromPassword = async () => {
+    if (await trigger(["password", "passwordCheck"])) setStep(3);
+  };
+
+  const handleCompleteSignup = async () => {
+    if (!(await trigger("nickname"))) return;
+
+    try {
+      setIsSubmitting(true);
+      await postSignup({
+        email,
+        password,
+        passwordConfirm: passwordCheck,
+        name: nickname,
+      });
+
+      setItem({ email, nickname });
+      toast.success("Signup complete");
+      navigate("/login");
+    } catch (error) {
+      console.log("Signup error", error);
+      toast.error("Signup failed. Please check your information.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const isStep1Valid = email.trim() !== "" && !errors.email;
+  const isStep2Valid =
+    password.trim() !== "" &&
+    passwordCheck.trim() !== "" &&
+    !errors.password &&
+    !errors.passwordCheck;
+  const isStep3Valid = nickname.trim() !== "" && !errors.nickname;
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <div className="flex items-center justify-center px-4 py-24">
+        <div className="w-full max-w-xs">
+          <div className="relative mb-8 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="absolute left-0 text-2xl text-white hover:text-gray-300"
+              aria-label="Go back"
+            >
+              <IoChevronBack />
+            </button>
+            <h2 className="text-3xl font-bold">Sign up</h2>
+          </div>
+
+          {step === 1 && (
+            <>
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="relative mb-6 flex w-full items-center justify-center rounded border border-white/40 bg-black px-4 py-3 text-base font-medium text-white hover:bg-white/5"
+              >
+                <FcGoogle className="absolute left-4 text-2xl" />
+                Continue with Google
+              </button>
+
+              <div className="mb-6 flex items-center gap-4">
+                <div className="h-px flex-1 bg-white/40" />
+                <span className="text-sm text-white">OR</span>
+                <div className="h-px flex-1 bg-white/40" />
+              </div>
+
+              <input
+                type="email"
+                placeholder="Enter your email"
+                {...register("email")}
+                className={`mb-2 w-full rounded border bg-zinc-900 px-4 py-3 text-white placeholder:text-gray-400 outline-none ${
+                  errors.email
+                    ? "border-red-500"
+                    : "border-white/40 focus:border-pink-500"
+                }`}
+              />
+
+              {(touchedFields.email || email.trim() !== "") && errors.email && (
+                <p className="mb-4 text-center text-sm text-red-500">
+                  {errors.email.message}
+                </p>
+              )}
+
+              <button
+                type="button"
+                disabled={!isStep1Valid}
+                onClick={handleNextFromEmail}
+                className={`w-full rounded px-4 py-3 text-base font-medium ${
+                  isStep1Valid
+                    ? "bg-pink-500 text-white hover:bg-pink-400"
+                    : "bg-zinc-900 text-gray-400"
+                }`}
+              >
+                Next
+              </button>
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <div className="mb-4 rounded border border-white/20 bg-zinc-900 px-3 py-2 text-sm text-white">
+                {email}
+              </div>
+
+              <div className="relative mb-2">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  {...register("password")}
+                  className={`w-full rounded border bg-zinc-900 px-4 py-3 pr-12 text-white placeholder:text-gray-400 outline-none ${
+                    errors.password
+                      ? "border-red-500"
+                      : "border-white/40 focus:border-pink-500"
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-gray-400 hover:text-white"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <IoEye /> : <IoEyeOff />}
+                </button>
+              </div>
+
+              {(touchedFields.password || password.trim() !== "") &&
+                errors.password && (
+                  <p className="mb-3 text-center text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+
+              <div className="relative mb-2">
+                <input
+                  type={showPasswordCheck ? "text" : "password"}
+                  placeholder="Confirm your password"
+                  {...register("passwordCheck")}
+                  className={`w-full rounded border bg-zinc-900 px-4 py-3 pr-12 text-white placeholder:text-gray-400 outline-none ${
+                    errors.passwordCheck
+                      ? "border-red-500"
+                      : "border-white/40 focus:border-pink-500"
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordCheck((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-gray-400 hover:text-white"
+                  aria-label="Toggle password confirmation visibility"
+                >
+                  {showPasswordCheck ? <IoEye /> : <IoEyeOff />}
+                </button>
+              </div>
+
+              {(touchedFields.passwordCheck || passwordCheck.trim() !== "") &&
+                errors.passwordCheck && (
+                  <p className="mb-4 text-center text-sm text-red-500">
+                    {errors.passwordCheck.message}
+                  </p>
+                )}
+
+              <button
+                type="button"
+                disabled={!isStep2Valid}
+                onClick={handleNextFromPassword}
+                className={`w-full rounded px-4 py-3 text-base font-medium ${
+                  isStep2Valid
+                    ? "bg-pink-500 text-white hover:bg-pink-400"
+                    : "bg-zinc-900 text-gray-400"
+                }`}
+              >
+                Next
+              </button>
+            </>
+          )}
+
+          {step === 3 && (
+            <>
+              <input
+                type="text"
+                placeholder="Enter your nickname"
+                {...register("nickname")}
+                className={`mb-2 w-full rounded border bg-zinc-900 px-4 py-3 text-white placeholder:text-gray-400 outline-none ${
+                  errors.nickname
+                    ? "border-red-500"
+                    : "border-white/40 focus:border-pink-500"
+                }`}
+              />
+
+              {(touchedFields.nickname || nickname.trim() !== "") &&
+                errors.nickname && (
+                  <p className="mb-4 text-center text-sm text-red-500">
+                    {errors.nickname.message}
+                  </p>
+                )}
+
+              <button
+                type="button"
+                disabled={!isStep3Valid || isSubmitting}
+                onClick={handleCompleteSignup}
+                className={`w-full rounded px-4 py-3 text-base font-medium ${
+                  isStep3Valid && !isSubmitting
+                    ? "bg-pink-500 text-white hover:bg-pink-400"
+                    : "bg-zinc-900 text-gray-400"
+                }`}
+              >
+                {isSubmitting ? "Submitting..." : "Complete signup"}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SignupPage;
