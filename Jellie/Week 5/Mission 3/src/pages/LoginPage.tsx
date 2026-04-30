@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext"
+import googleLogo from "../assets/google-logo.png";;
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -78,7 +79,7 @@ export default function LoginPage() {
           onClick={handleGoogleLogin}
           className="w-full border border-slate-300 py-3 rounded-xl flex items-center justify-center gap-3 font-semibold hover:bg-slate-50 active:scale-[0.98] transition"
         >
-          <img src="/google-logo.png" alt="구글 로고" className="w-5 h-5" />
+          <img src={googleLogo} alt="구글 로고" className="w-5 h-5" />
           <span>구글로 로그인</span>
         </button>
       </div>
