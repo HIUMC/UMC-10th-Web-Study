@@ -1,5 +1,5 @@
-const useLocalStorage = () => {
-  function setItem(key: string, value: unknown) {
+const useLocalStorage = (key: string) => {
+  function setItem(value: unknown) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
@@ -7,7 +7,7 @@ const useLocalStorage = () => {
     }
   }
 
-  function getItem<T>(key: string): T | null {
+  function getItem<T>(): T | null {
     try {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : null;
@@ -17,7 +17,7 @@ const useLocalStorage = () => {
     }
   }
 
-  function removeItem(key: string) {
+  function removeItem() {
     try {
       localStorage.removeItem(key);
     } catch (error) {

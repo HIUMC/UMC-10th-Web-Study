@@ -11,7 +11,7 @@ import type {
 export async function postSignUp(data: RequestUser) {
   const response = await axiosInstance.post<CommonResponse<ResponseSignUp>>(
     '/v1/auth/signup',
-    data
+    data,
   );
   return response.data;
 }
@@ -19,8 +19,14 @@ export async function postSignUp(data: RequestUser) {
 export async function postSignIn(data: RequestSignInDto) {
   const response = await axiosInstance.post<CommonResponse<ResponseSignInDto>>(
     '/v1/auth/signin',
-    data
+    data,
   );
+  return response.data;
+}
+
+export async function postSignOut() {
+  const response =
+    await axiosInstance.post<CommonResponse<null>>('/v1/auth/signout');
   return response.data;
 }
 
