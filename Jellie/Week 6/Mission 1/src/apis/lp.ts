@@ -1,6 +1,10 @@
 import axiosInstance from "./axios";
 import type { PaginationDto } from "../types/common";
-import type { LPDetailResponse, LPListResponse } from "../types/lp";
+import type {
+  CommentListResponse,
+  LPDetailResponse,
+  LPListResponse,
+} from "../types/lp";
 
 export type CreateLPRequest = {
   title: string;
@@ -43,6 +47,17 @@ export const getLPDetail = async (
   lpId: string
 ): Promise<LPDetailResponse> => {
   const { data } = await axiosInstance.get("/lps/" + lpId);
+  return data;
+};
+
+export const getLPComments = async (
+  lpId: string,
+  paginationDto: PaginationDto
+): Promise<CommentListResponse> => {
+  const { data } = await axiosInstance.get("/lps/" + lpId + "/comments", {
+    params: paginationDto,
+  });
+
   return data;
 };
 

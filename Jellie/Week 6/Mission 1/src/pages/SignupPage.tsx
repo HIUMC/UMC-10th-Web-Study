@@ -15,13 +15,7 @@ export default function SignupPage() {
     event.preventDefault();
 
     try {
-      await signUp({
-        name,
-        email,
-        password,
-        bio,
-        avatar,
-      });
+      await signUp({ name, email, password, bio, avatar });
 
       alert("회원가입이 완료되었습니다.");
       navigate("/login");
@@ -33,15 +27,17 @@ export default function SignupPage() {
 
   return (
     <main className="min-h-[calc(100vh-120px)] flex items-center justify-center">
-      <section className="w-full max-w-md bg-[#18181d] rounded-3xl p-8">
-        <h1 className="text-3xl font-black text-center mb-8">회원가입</h1>
+      <section className="w-full max-w-md panel-analog rounded-3xl p-8 shadow-2xl shadow-black/40">
+        <h1 className="text-3xl font-black text-center mb-8 text-[#e8ded4]">
+          회원가입
+        </h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="이름"
-            className="px-4 py-3 rounded-xl bg-white/10 border border-white/10 outline-none focus:border-pink-500"
+            className="px-4 py-3 input-analog"
           />
 
           <input
@@ -49,7 +45,7 @@ export default function SignupPage() {
             onChange={(event) => setEmail(event.target.value)}
             type="email"
             placeholder="이메일"
-            className="px-4 py-3 rounded-xl bg-white/10 border border-white/10 outline-none focus:border-pink-500"
+            className="px-4 py-3 input-analog"
           />
 
           <input
@@ -57,26 +53,24 @@ export default function SignupPage() {
             onChange={(event) => setPassword(event.target.value)}
             type="password"
             placeholder="비밀번호"
-            className="px-4 py-3 rounded-xl bg-white/10 border border-white/10 outline-none focus:border-pink-500"
+            className="px-4 py-3 input-analog"
           />
 
           <input
             value={avatar}
             onChange={(event) => setAvatar(event.target.value)}
             placeholder="프로필 이미지 URL"
-            className="px-4 py-3 rounded-xl bg-white/10 border border-white/10 outline-none focus:border-pink-500"
+            className="px-4 py-3 input-analog"
           />
 
           <textarea
             value={bio}
             onChange={(event) => setBio(event.target.value)}
             placeholder="소개글"
-            className="min-h-28 px-4 py-3 rounded-xl bg-white/10 border border-white/10 outline-none focus:border-pink-500 resize-none"
+            className="min-h-28 px-4 py-3 input-analog resize-none"
           />
 
-          <button className="mt-2 py-3 rounded-xl bg-pink-500 font-bold">
-            회원가입
-          </button>
+          <button className="mt-2 py-3 btn-primary">회원가입</button>
         </form>
       </section>
     </main>

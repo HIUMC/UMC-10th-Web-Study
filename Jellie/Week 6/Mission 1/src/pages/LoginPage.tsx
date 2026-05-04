@@ -25,19 +25,14 @@ export default function LoginPage() {
     event.preventDefault();
 
     try {
-      const response = await signIn({
-        email,
-        password,
-      });
+      const response = await signIn({ email, password });
 
       const accessToken = response.data.accessToken;
       const refreshToken = response.data.refreshToken;
 
       login(accessToken, refreshToken);
 
-      navigate(redirectPath, {
-        replace: true,
-      });
+      navigate(redirectPath, { replace: true });
     } catch (error) {
       console.error(error);
       alert("로그인에 실패했습니다.");
@@ -51,8 +46,10 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-[calc(100vh-120px)] flex items-center justify-center">
-      <section className="w-full max-w-md bg-[#18181d] rounded-3xl p-8">
-        <h1 className="text-3xl font-black text-center mb-8">로그인</h1>
+      <section className="w-full max-w-md panel-analog rounded-3xl p-8 shadow-2xl shadow-black/40">
+        <h1 className="text-3xl font-black text-center mb-8 text-[#e8ded4]">
+          로그인
+        </h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -60,7 +57,7 @@ export default function LoginPage() {
             onChange={(event) => setEmail(event.target.value)}
             type="email"
             placeholder="이메일"
-            className="px-4 py-3 rounded-xl bg-white/10 border border-white/10 outline-none focus:border-pink-500"
+            className="px-4 py-3 input-analog"
           />
 
           <input
@@ -68,17 +65,15 @@ export default function LoginPage() {
             onChange={(event) => setPassword(event.target.value)}
             type="password"
             placeholder="비밀번호"
-            className="px-4 py-3 rounded-xl bg-white/10 border border-white/10 outline-none focus:border-pink-500"
+            className="px-4 py-3 input-analog"
           />
 
-          <button className="mt-2 py-3 rounded-xl bg-pink-500 font-bold">
-            로그인
-          </button>
+          <button className="mt-2 py-3 btn-primary">로그인</button>
         </form>
 
         <button
           onClick={handleGoogleLogin}
-          className="mt-4 w-full py-3 rounded-xl bg-white text-black font-bold flex items-center justify-center gap-3"
+          className="mt-4 w-full py-3 btn-secondary flex items-center justify-center gap-3"
         >
           <img src={googleLogo} alt="Google" className="w-5 h-5" />
           Google로 로그인

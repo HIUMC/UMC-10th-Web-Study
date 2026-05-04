@@ -11,6 +11,16 @@ export type Like = {
   lpId: number;
 };
 
+export type Author = {
+  id: number;
+  name: string;
+  email: string;
+  bio: string;
+  avatar: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type LP = {
   id: number;
   title: string;
@@ -24,20 +34,22 @@ export type LP = {
   likes: Like[];
 };
 
-export type Author = {
-  id: number;
-  name: string;
-  email: string;
-  bio: string;
-  avatar: string;
-  createdAt: string;
-  updatedAt: string;
+export type LPDetail = LP & {
+  author: Author;
 };
 
-export type LPDetail = LP & {
+export type Comment = {
+  id: number;
+  content: string;
+  lpId: number;
+  authorId: number;
+  createdAt: string;
+  updatedAt: string;
   author: Author;
 };
 
 export type LPListResponse = CommonResponse<CursorBasedResponse<LP>>;
 
 export type LPDetailResponse = CommonResponse<LPDetail>;
+
+export type CommentListResponse = CommonResponse<CursorBasedResponse<Comment>>;
