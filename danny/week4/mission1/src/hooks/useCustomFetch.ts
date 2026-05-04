@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const HEADERS = {
@@ -7,8 +7,11 @@ const HEADERS = {
 
 export function useCustomFetch<T>(url: string | null) {
   const [data, setData] = useState<T | null>(null);
-  const [isPending, setIsPending] = useState(false);
+  const [isPending, setIsPending] = useState(!!url);
   const [isError, setIsError] = useState(false);
+  const [trigger, setTrigger] = useState(0);
+
+  const refetch = useCallback(() => setTrigger((t) => t + 1), []);
 
   useEffect(() => {
     if (!url) return;
@@ -38,7 +41,7 @@ export function useCustomFetch<T>(url: string | null) {
     return () => {
       controller.abort();
     };
-  }, [url]);
+  }, [url, trigger]);
 
-  return { data, isPending, isError };
+  return { data, isPending, isError, refetch };
 }
