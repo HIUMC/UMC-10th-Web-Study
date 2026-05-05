@@ -1,0 +1,60 @@
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}
+
+/* 버튼 스타일 */
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* 입력 필드 스타일 */
+input[type='number'],
+input[type='text'] {
+  transition: border-color 0.3s ease;
+}
+
+input[type='number']:focus,
+input[type='text']:focus {
+  outline: none;
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  button {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+}
