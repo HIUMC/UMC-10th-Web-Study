@@ -7,13 +7,6 @@ type BackButtonProps = {
 
 // 부모(Moviepage.tsx)에서 page,setPage 전달받음
 export const BackButton = ({ page, setPage }: BackButtonProps) => {
-  // 1) 이전 버튼
-  //   - disabled={page===1} : 1페이지에서는 이전 버튼 비활성화
-  //   - 클릭시 1페이지씩 감소
-  // 2) <span> : 현재 페이지 번호
-  // 3) 다음 버튼
-  //   - 항상 활성화
-  //   - 클릭시 1페이지씩 증가
   return (
     <div className="flex items-center justify-center gap-6 mt-5">
       <button

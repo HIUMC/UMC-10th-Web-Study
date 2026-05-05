@@ -10,7 +10,7 @@ export default function CreditCard({ credit }: MovieCreditProps) {
       <img
         src={`https://image.tmdb.org/t/p/w200${credit.profile_path}`}
         alt={credit.name}
-        className="w-30 h-30 object-cover rounded-full border-white flex justify-center border-2 border-white"
+        className="w-30 h-30 object-cover rounded-full border-white flex justify-center border-2"
       />
       <p className="text-white text-m text-center">{credit.name}</p>
       {credit.character && (

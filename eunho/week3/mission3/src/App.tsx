@@ -10,11 +10,13 @@ const router = createBrowserRouter([
     path: "/",
     element: <HomePage />,
     errorElement: <NotFoundPage />,
+    // 하위 경로를 정의하는 배열
     children: [
       {
         path: "movies/:category",
         element: <MoviePage />,
       },
+
       {
         path: "movie/:movieId",
         element: <MovieDetailPage />,
