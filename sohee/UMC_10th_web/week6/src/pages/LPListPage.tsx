@@ -1,17 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { fetchLpList, LpCard } from '../hooks/api';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { fetchLpList } from '../hooks/api';
+import SkeletonCard from '../components/SkeletonCard';
 
 export default function LPListPage() {
   const [sort, setSort] = useState<'latest' | 'oldest'>('latest');
   const navigate = useNavigate();
+  const observerRef = useRef<HTMLDivElement>(null);
 
-  const { data, isLoading, isError, error, refetch } = useQuery<LpCard[], Error>({
+  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['lps', sort],
-    queryFn: () => fetchLpList(sort),
+    queryFn: ({ pageParam }: { pageParam: number }) => fetchLpList(sort, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
     staleTime: 10000,
   });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const allItems = data?.pages.flatMap(page => page.data) || [];
 
   return (
     <section className="page-section">
@@ -38,42 +61,50 @@ export default function LPListPage() {
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="card-grid">
-          {Array.from({ length: 6 }).map((_, idx) => (
-            <div key={idx} className="card-skeleton">
-              <div className="skeleton-image" />
-              <div className="skeleton-line short" />
-              <div className="skeleton-line long" />
+      <div className="card-grid">
+        {isLoading && (
+          <>
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <SkeletonCard key={idx} />
+            ))}
+          </>
+        )}
+
+        {allItems.map((item) => (
+          <article
+            key={item.id}
+            className="lp-card"
+            onClick={() => navigate(`/lp/${item.id}`)}
+          >
+            <div className="card-thumb" style={{ backgroundImage: `url(${item.thumbnail})` }} />
+            <div className="card-meta">
+              <strong>{item.title}</strong>
+              <span>{item.uploadDate}</span>
+              <span>❤ {item.likes}</span>
             </div>
-          ))}
-        </div>
-      ) : isError ? (
+            <p>{item.body.slice(0, 80)}...</p>
+          </article>
+        ))}
+
+        {isFetchingNextPage && (
+          <>
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <SkeletonCard key={`next-${idx}`} />
+            ))}
+          </>
+        )}
+      </div>
+
+      {isError && (
         <div className="error-block">
           <p>{(error as Error)?.message || '데이터를 불러오는 데 실패했습니다.'}</p>
-          <button type="button" onClick={() => refetch()}>
+          <button type="button" onClick={() => window.location.reload()}>
             다시 시도
           </button>
         </div>
-      ) : (
-        <div className="card-grid">
-          {data?.map((item) => (
-            <article
-              key={item.id}
-              className="lp-card"
-              onClick={() => navigate(`/lp/${item.id}`)}
-            >
-              <div className="card-thumb" style={{ backgroundImage: `url(${item.thumbnail})` }} />
-              <div className="card-meta">
-                <strong>{item.title}</strong>
-                <span>{item.uploadDate}</span>
-                <span>❤ {item.likes}</span>
-              </div>
-              <p>{item.body.slice(0, 80)}...</p>
-            </article>
-          ))}
-        </div>
       )}
+
+      <div ref={observerRef} style={{ height: '20px' }} />
     </section>
   );
 }
