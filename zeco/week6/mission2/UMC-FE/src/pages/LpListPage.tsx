@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetLpList } from '../hooks/useGetLpList';
+import { useGetLpListInfinite } from '../hooks/useGetLpListInfinite';
 import LpCard from '../components/LpCard';
 import type { LpOrder } from '../types/lp';
 import { getHttpErrorMessage } from '../utils/error';
@@ -11,6 +11,7 @@ export default function LpListPage() {
   const [order, setOrder] = useState<LpOrder>('desc');
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const {
     data,
@@ -18,9 +19,29 @@ export default function LpListPage() {
     isError,
     error,
     refetch,
-  } = useGetLpList({ order, search });
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetLpListInfinite({ order, search });
 
-  const lps = data ?? [];
+  const lps = data?.pages.flatMap((page) => page.data) ?? [];
+
+  useEffect(() => {
+    const target = bottomRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: '160px 0px', threshold: 0.1 }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -109,6 +130,12 @@ export default function LpListPage() {
         </div>
       )}
 
+      {isFetchingNextPage && (
+        <div className="mt-4">
+          <LoadingState variant="skeletonGrid" count={6} />
+        </div>
+      )}
+
       {/* 빈 목록 */}
       {!isPending && !isError && lps.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20">
@@ -119,8 +146,11 @@ export default function LpListPage() {
       )}
 
       {!isPending && !isError && lps.length > 0 && (
-        <p className="text-center text-gray-600 text-sm mt-6">최대 20개의 LP를 불러왔습니다.</p>
+        <p className="text-center text-gray-600 text-sm mt-6">
+          {hasNextPage ? '스크롤하면 더 불러옵니다.' : '모든 LP를 불러왔습니다.'}
+        </p>
       )}
+      <div ref={bottomRef} className="h-8" />
     </div>
   );
 }
