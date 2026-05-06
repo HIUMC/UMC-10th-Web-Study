@@ -10,9 +10,6 @@ export default function Navbar() {
   const [data, setData] = useState<ResponseMyInfoDto | null>(null);
   const navigate = useNavigate();
 
-  console.log("accessToken:", accessToken);
-  console.log("data:", data);
-
   useEffect(() => {
     if (!accessToken) return;
     const fetchData = async () => {

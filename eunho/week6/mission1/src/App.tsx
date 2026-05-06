@@ -18,6 +18,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import LpDetailPage from "./pages/LpDetailPage";
 import { GoogleLoginRedirectpage } from "./pages/GoogleLoginRedirectpage";
+import Comments from "./pages/Comments";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -52,6 +53,16 @@ const publicRoutes: RouteObject[] = [
       {
         path: "/v1/lps/:lpId",
         element: <LpDetailPage />,
+      },
+      {
+        path: "v1/lps/:lpId",
+        element: <LpDetailPage />,
+        children: [
+          {
+            path: "comments",
+            element: <Comments />,
+          },
+        ],
       },
     ],
   },
