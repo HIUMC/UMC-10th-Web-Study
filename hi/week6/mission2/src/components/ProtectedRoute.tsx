@@ -1,0 +1,22 @@
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+
+const ProtectedRoute = () => {
+  const location = useLocation();
+  const accessToken = localStorage.getItem('accessToken');
+
+  if (!accessToken) {
+    alert('로그인이 필요한 페이지입니다.');
+
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: location.pathname }}
+      />
+    );
+  }
+
+  return <Outlet />;
+};
+
+export default ProtectedRoute;
