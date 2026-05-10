@@ -150,22 +150,6 @@ const SignupPage = () => {
   const renderEmailStep = () => {
     return (
       <>
-        <button
-          type="button"
-          className="h-[44px] w-full rounded-md border border-white/60 bg-black text-[14px] font-medium text-white transition-colors hover:border-white"
-        >
-          <span className="flex items-center justify-center gap-3">
-            <GoogleIcon />
-            <span>구글 로그인</span>
-          </span>
-        </button>
-
-        <div className="flex items-center gap-4">
-          <div className="h-px flex-1 bg-white/60" />
-          <span className="text-[14px] font-medium text-white">OR</span>
-          <div className="h-px flex-1 bg-white/60" />
-        </div>
-
         <div className="flex flex-col gap-1.5">
           <input
             {...register("email")}
