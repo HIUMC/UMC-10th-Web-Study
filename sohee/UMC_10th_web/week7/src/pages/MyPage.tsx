@@ -39,6 +39,16 @@ export default function MyPage() {
 
   const updateProfileMutation = useMutation({
     mutationFn: updateProfileRequest,
+    onMutate: async (profile) => {
+      const previousUser = auth.user;
+      auth.updateProfile(profile);
+      return { previousUser };
+    },
+    onError: (_error, _profile, context) => {
+      if (context?.previousUser) {
+        auth.updateProfile(context.previousUser);
+      }
+    },
     onSuccess: (profile) => {
       auth.updateProfile(profile);
       setIsEditing(false);

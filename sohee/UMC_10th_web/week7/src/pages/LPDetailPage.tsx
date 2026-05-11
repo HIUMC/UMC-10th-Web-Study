@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createComment,
   deleteComment,
@@ -98,9 +98,51 @@ export default function LPDetailPage() {
     },
   });
 
+  const getOptimisticLikedLp = (lp: LpCard): LpCard => ({
+    ...lp,
+    likedByMe: !lp.likedByMe,
+    likes: lp.likedByMe ? Math.max(0, lp.likes - 1) : lp.likes + 1,
+  });
+
   const likeMutation = useMutation({
     mutationFn: () => toggleLpLike(id),
-    onSuccess: () => {
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['lp', id] });
+      await queryClient.cancelQueries({ queryKey: ['lps'] });
+
+      const previousLp = queryClient.getQueryData<LpCard>(['lp', id]);
+      const previousLpLists = queryClient.getQueriesData<InfiniteData<{ data: LpCard[]; nextPage?: number }>>({
+        queryKey: ['lps'],
+      });
+
+      if (previousLp) {
+        queryClient.setQueryData<LpCard>(['lp', id], getOptimisticLikedLp(previousLp));
+      }
+
+      queryClient.setQueriesData<InfiniteData<{ data: LpCard[]; nextPage?: number }>>({ queryKey: ['lps'] }, (oldData) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page) => ({
+            ...page,
+            data: page.data.map((lp) => (lp.id === id ? getOptimisticLikedLp(lp) : lp)),
+          })),
+        };
+      });
+
+      return { previousLp, previousLpLists };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previousLp) {
+        queryClient.setQueryData(['lp', id], context.previousLp);
+      }
+
+      context?.previousLpLists.forEach(([queryKey, previousData]) => {
+        queryClient.setQueryData(queryKey, previousData);
+      });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['lp', id] });
       queryClient.invalidateQueries({ queryKey: ['lps'] });
     },
