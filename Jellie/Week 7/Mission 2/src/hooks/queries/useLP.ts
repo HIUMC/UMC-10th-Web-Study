@@ -5,12 +5,20 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import {
+  createLP,
+  createLPComment,
+  deleteLP,
+  deleteLPComment,
   getLPComments,
   getLPDetail,
   getLPs,
   likeLP,
   unlikeLP,
   updateLP,
+  updateLPComment,
+  type CreateCommentRequest,
+  type CreateLPRequest,
+  type UpdateCommentRequest,
   type UpdateLPRequest,
 } from "../../apis/lp";
 import type { PaginationDto } from "../../types/common";
@@ -52,7 +60,7 @@ export const useLPDetail = (lpId?: string) => {
 
 export const useInfiniteLPComments = (
   lpId: string | undefined,
-  paginationDto: PaginationDto
+  paginationDto: PaginationDto,
 ) => {
   return useInfiniteQuery<CommentListResponse>({
     queryKey: [QUERY_KEY.lpComments, lpId, paginationDto.order],
@@ -69,6 +77,41 @@ export const useInfiniteLPComments = (
     },
     staleTime: 1000 * 60 * 3,
     gcTime: 1000 * 60 * 10,
+  });
+};
+
+export const useCreateLP = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (body: CreateLPRequest) => createLP(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.lps] });
+    },
+  });
+};
+
+export const useUpdateLP = (lpId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (body: UpdateLPRequest) => updateLP(lpId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.lp, String(lpId)] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.lps] });
+    },
+  });
+};
+
+export const useDeleteLP = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (lpId: number) => deleteLP(lpId),
+    onSuccess: (_, lpId) => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.lp, String(lpId)] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.lps] });
+    },
   });
 };
 
@@ -95,7 +138,7 @@ export const useLikeLP = () => {
           if (!old || !myInfo?.data) return old;
 
           const alreadyLiked = old.data.likes.some(
-            (like) => like.userId === myInfo.data.id
+            (like) => like.userId === myInfo.data.id,
           );
 
           if (alreadyLiked) return old;
@@ -114,7 +157,7 @@ export const useLikeLP = () => {
               ],
             },
           };
-        }
+        },
       );
 
       return { previousLP };
@@ -124,7 +167,7 @@ export const useLikeLP = () => {
       if (context?.previousLP) {
         queryClient.setQueryData(
           [QUERY_KEY.lp, String(lpId)],
-          context.previousLP
+          context.previousLP,
         );
       }
     },
@@ -168,11 +211,11 @@ export const useUnlikeLP = () => {
             data: {
               ...old.data,
               likes: old.data.likes.filter(
-                (like) => like.userId !== myInfo.data.id
+                (like) => like.userId !== myInfo.data.id,
               ),
             },
           };
-        }
+        },
       );
 
       return { previousLP };
@@ -182,7 +225,7 @@ export const useUnlikeLP = () => {
       if (context?.previousLP) {
         queryClient.setQueryData(
           [QUERY_KEY.lp, String(lpId)],
-          context.previousLP
+          context.previousLP,
         );
       }
     },
@@ -199,18 +242,46 @@ export const useUnlikeLP = () => {
   });
 };
 
-export const useUpdateLP = (lpId: number) => {
+export const useCreateLPComment = (lpId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (body: UpdateLPRequest) => updateLP(lpId, body),
+    mutationFn: (body: CreateCommentRequest) => createLPComment(lpId, body),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.lp, String(lpId)],
+        queryKey: [QUERY_KEY.lpComments, String(lpId)],
       });
+    },
+  });
+};
 
+export const useUpdateLPComment = (lpId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      commentId,
+      body,
+    }: {
+      commentId: number;
+      body: UpdateCommentRequest;
+    }) => updateLPComment(lpId, commentId, body),
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.lps],
+        queryKey: [QUERY_KEY.lpComments, String(lpId)],
+      });
+    },
+  });
+};
+
+export const useDeleteLPComment = (lpId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (commentId: number) => deleteLPComment(lpId, commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.lpComments, String(lpId)],
       });
     },
   });

@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMyInfo, updateMyInfo, type UpdateUserRequest } from "../../apis/auth";
+import {
+  deleteMyInfo,
+  getMyInfo,
+  signOut,
+  updateMyInfo,
+  type UpdateUserRequest,
+} from "../../apis/auth";
 import { QUERY_KEY } from "../../constants/key";
 import { useAuth } from "../../context/AuthContext";
 
@@ -67,5 +73,24 @@ export const useUpdateMyInfo = () => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.myInfo] });
     },
+  });
+};
+
+export const useSignOut = () => {
+  const { logout } = useAuth();
+
+  return useMutation({
+    mutationFn: signOut,
+    onSuccess: logout,
+    onError: logout,
+  });
+};
+
+export const useDeleteMyInfo = () => {
+  const { logout } = useAuth();
+
+  return useMutation({
+    mutationFn: deleteMyInfo,
+    onSuccess: logout,
   });
 };
