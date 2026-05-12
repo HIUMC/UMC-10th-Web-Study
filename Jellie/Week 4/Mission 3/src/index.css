@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: #0a0a0a;
+  color: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
