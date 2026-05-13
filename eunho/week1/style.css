@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #e8e8e8;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.todo__card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 500px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 800;
+}
+.todo__form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+.todo__input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+}
+.todo__add-btn {
+  padding: 10px 16px;
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.todo__lists {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.todo__section {
+  flex: 1;
+}
+.todo__section h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.todo__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.todo__item span {
+  font-size: 15px;
+}
+.todo__btn--complete {
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  background: #22c55e;
+  color: white;
+  border-radius: 6px;
+}
+.todo__btn--delete {
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 6px;
+}

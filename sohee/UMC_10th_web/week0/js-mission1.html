@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>UMC Study Plan</title>
+    <style>
+        body {
+        background-color: #dfe7fa;
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+        }
+        main {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+        .title{
+            font-size:50px;
+            font-weight:500;
+            margin-bottom:90px;
+            letter-spacing:-1px;
+        }
+        .input-section {
+            background: white;
+            border: 2px solid #000;
+            padding: 20px;
+        }
+        .input-section input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 20px;
+            font-style: italic;
+            color: #0f0f0f;
+        }
+        .plan-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5px;
+            gap:120px;
+        }
+
+        .plan-column {
+            width: 45%;
+            font-size:20px;
+            font-weight:600;
+        
+        }
+
+  </style>
+</head>
+<body>
+
+  <main>
+      <div class="title">UMC Study Plan</div>
+
+    <section class="input-section">
+      <input type="text" placeholder="스터디 계획을 작성해보세요!">
+    </section>
+
+      <div class="plan-container">
+        <section class="plan-column">
+            <p>해야 할 일</p>
+            <ul id="todo-list"></ul>
+        </section>
+        <section class="plan-column">
+            <p>해낸 일</p>
+            <ul id="done-list"></ul>
+        </section>
+    </div>
+</main>
+
+  <script>
+    const input = document.querySelector('.input-section input');
+    const todoList = document.querySelector('#todo-list');
+    const doneList = document.querySelector('#done-list');
+    input.addEventListener('keydown',function (e){
+        if(e.key ==='Enter' && input.value.trim()!==""){
+            addTodo(input.value);
+            input.value="";
+        }
+    });
+    
+    function addTodo(text) {
+    const li = document.createElement('li');
+    li.style.cssText = "list-style:none; margin:10px 0; display:flex; justify-content:space-between; align-items:center; background:white; padding:10px; border:1px solid #000;";
+    
+    li.innerHTML = `
+      <span>${text}</span>
+      <button onclick="completeTask(this)" style="cursor:pointer; padding:5px 10px; background:#dfe7fa; border:1px solid #000;">완료</button>
+    `;
+    
+    todoList.appendChild(li);
+  }
+  function completeTask(btn) {
+    const li = btn.parentElement; 
+    
+    li.querySelector('button').innerText = "삭제";
+    li.querySelector('button').setAttribute('onclick', 'deleteTask(this)');
+    
+    doneList.appendChild(li); 
+  }
+  function deleteTask(btn) {
+    btn.parentElement.remove();
+  }
+  </script>
+</body>
+</html>

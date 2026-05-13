@@ -1,0 +1,143 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: #eef3fa;
+  color: #111;
+}
+
+/* Block */
+.todo {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 40px 80px;
+}
+
+/* Elements */
+.todo__title {
+  text-align: center;
+  font-size: 56px;
+  font-weight: 700;
+  margin-bottom: 90px;
+}
+
+.todo__input-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 30px;
+}
+
+.todo__divider {
+  width: 100%;
+  height: 3px;
+  background: #d7dee8;
+  margin-bottom: 18px;
+}
+
+.todo__input {
+  display: block;
+  width: 80%;
+  max-width: 720px;
+  height: 58px;
+  margin: 0 auto;
+  border: 3px solid #222;
+  background: #fff;
+  padding: 0 18px;
+  font-size: 26px;
+  outline: none;
+}
+
+.todo__input::placeholder {
+  color: #d6dde7;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.todo__board {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 120px;
+  padding-top: 20px;
+}
+
+.todo__column {
+  flex: 1;
+}
+
+.todo__column-title {
+  width: fit-content;
+  margin: 0 auto 42px;
+  font-size: 34px;
+  font-weight: 800;
+  border-bottom: 4px solid #cfd7e3;
+  padding-bottom: 6px;
+}
+
+.todo__list {
+  list-style: none;
+}
+
+.todo__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0 12px;
+  border-bottom: 4px solid #dbe3ef;
+  margin-bottom: 18px;
+}
+
+.todo__text {
+  font-size: 38px;
+  font-weight: 800;
+  word-break: break-word;
+}
+
+.todo__button {
+  border: none;
+  background: #dbe3ef;
+  color: #111;
+  padding: 10px 14px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.todo__button:hover {
+  filter: brightness(0.95);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .todo__title {
+    font-size: 42px;
+    margin-bottom: 60px;
+  }
+
+  .todo__input {
+    width: 100%;
+    font-size: 20px;
+    height: 50px;
+  }
+
+  .todo__board {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .todo__text {
+    font-size: 26px;
+  }
+
+  .todo__column-title {
+    font-size: 28px;
+  }
+
+}

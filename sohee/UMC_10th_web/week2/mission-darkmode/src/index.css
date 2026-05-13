@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+/* ⚠️ 이 코드가 있어야 <html class="dark">를 인식합니다! */
+@variant dark (&:where(.dark, .dark *));
+
+/* 확인용: 배경색이 부드럽게 변하도록 추가 */
+body {
+  @apply transition-colors duration-500;
+}

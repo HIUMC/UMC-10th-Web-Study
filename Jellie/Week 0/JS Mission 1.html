@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS Mission 1</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+    min-height: 100vh;
+    background-color: #eef3fb;
+    background-image:
+      linear-gradient(to right, rgba(120, 145, 190, 0.18) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(120, 145, 190, 0.18) 1px, transparent 1px);
+    background-size: 32px 32px;
+  
+    font-family: Arial, sans-serif;
+    color: #1f2a44;
+    }
+
+
+    .study-plan {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .study-plan__header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .study-plan__title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 36px;
+    }
+
+    .study-plan__divider {
+      border: none;
+      border-top: 3px solid #7e97c5ac;
+      margin-bottom: 28px;
+    }
+
+    .study-plan__input-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+
+    .study-plan__input {
+      width: 100%;
+      max-width: 720px;
+      height: 52px;
+      padding: 0 18px;
+      border: 2px solid #6b88b6;
+      background-color: transparent;
+      font-size: 18px;
+      color: #1f2a44;
+      outline: none;
+    }
+
+    .study-plan__content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .todo-section__title {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .todo-section__list {
+      list-style: none;
+    }
+
+    .todo-section__item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 2px solid #d4dced;
+    }
+
+    .todo-section__text {
+      flex: 1;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .todo-section__item--done .todo-section__text {
+      color: #6f7f9d;
+      text-decoration: line-through;
+      font-weight: 600;
+    }
+
+    .todo-section__actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .todo-section__button {
+      min-width: 54px;
+      height: 30px;
+      padding: 0 10px;
+      border: none;
+      background-color: #dce4f5;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main class="study-plan">
+    <header class="study-plan__header">
+      <h1 class="study-plan__title">스터디플래너</h1>
+      <hr class="study-plan__divider" />
+      <div class="study-plan__input-wrap">
+        <input
+          type="text"
+          class="study-plan__input"
+          id="todoInput"
+          placeholder="스터디 계획을 작성해보세요!"
+        />
+      </div>
+    </header>
+
+    <section class="study-plan__content">
+      <section class="todo-section">
+        <h2 class="todo-section__title">해야 할 일</h2>
+        <ul class="todo-section__list" id="todoList"></ul>
+      </section>
+
+      <section class="todo-section">
+        <h2 class="todo-section__title">해낸 일</h2>
+        <ul class="todo-section__list" id="doneList"></ul>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const input = document.getElementById("todoInput");
+    const todoList = document.getElementById("todoList");
+    const doneList = document.getElementById("doneList");
+
+    function isDuplicate(text) {
+      const allItems = [
+        ...todoList.querySelectorAll(".todo-section__text"),
+        ...doneList.querySelectorAll(".todo-section__text")
+      ];
+      return allItems.some(item => item.textContent === text);
+    }
+
+    function deleteItem(item) {
+      item.remove();
+    }
+
+    function completeItem(item) {
+      item.classList.add("todo-section__item--done");
+
+      const actionBox = item.querySelector(".todo-section__actions");
+      const completeBtn = item.querySelector(".todo-section__button--complete");
+
+      if (completeBtn) completeBtn.remove();
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "todo-section__button todo-section__button--delete";
+      deleteBtn.textContent = "삭제";
+
+      deleteBtn.addEventListener("click", function () {
+        deleteItem(item);
+      });
+
+      actionBox.append(deleteBtn);
+      doneList.append(item);
+    }
+
+    function createTodoItem(text) {
+      const li = document.createElement("li");
+      li.className = "todo-section__item";
+
+      const span = document.createElement("span");
+      span.className = "todo-section__text";
+      span.textContent = text;
+
+      const actions = document.createElement("div");
+      actions.className = "todo-section__actions";
+
+      const completeBtn = document.createElement("button");
+      completeBtn.className = "todo-section__button todo-section__button--complete";
+      completeBtn.textContent = "완료";
+
+      completeBtn.addEventListener("click", function () {
+        completeItem(li);
+      });
+
+      actions.append(completeBtn);
+      li.append(span, actions);
+
+      return li;
+    }
+
+    function addTodo() {
+      const value = input.value.trim();
+
+      if (value === "") return;
+      if (isDuplicate(value)) return;
+
+      const item = createTodoItem(value);
+      todoList.append(item);
+      input.value = "";
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        addTodo();
+      }
+    });
+  </script>
+</body>
+</html>

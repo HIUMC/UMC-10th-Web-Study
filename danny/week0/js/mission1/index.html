@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UMC Study Plan</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #eef2f8;
+        font-family: sans-serif;
+        color: #111111;
+        min-height: 100vh;
+        padding: 60px 20px;
+      }
+
+      .todo-app__header {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+
+      .todo-app__title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+
+      .todo-app__divider {
+        border: none;
+        border-top: 1px solid #dbe3ef;
+        max-width: 860px;
+        margin: 0 auto 28px;
+      }
+
+      .todo-app__form {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 32px;
+      }
+
+      .todo-app__input {
+        width: 100%;
+        max-width: 640px;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+        border: 1.5px solid #212121;
+        border-radius: 6px;
+        background: #fefefe;
+        outline: none;
+        transition: border-color 0.18s;
+        color: #111111;
+      }
+
+      .todo-app__input::placeholder {
+        color: #aab4c8;
+        font-style: italic;
+      }
+
+      .todo-app__input:focus {
+        border-color: #285fc3;
+      }
+
+      .todo-app__lists {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 48px;
+        max-width: 860px;
+        margin: 0 auto;
+      }
+
+      .todo-app__section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .todo-app__section-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 12px;
+        text-decoration: underline;
+        text-decoration-color: #dbe3ef;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 5px;
+      }
+
+      .todo-app__list {
+        width: 100%;
+        max-width: 200px;
+        padding: 0;
+      }
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 12px 4px;
+        border-bottom: 2px solid #dbe3ef;
+        list-style: none;
+      }
+
+      .todo-item__text {
+        font-size: 0.95rem;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .button {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border: none;
+        border-radius: 0;
+        background: #dbe3ef;
+        color: #111111;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background 0.15s;
+      }
+
+      .button:hover {
+        background: #c8d3e6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="todo-app">
+      <header class="todo-app__header">
+        <h1 class="todo-app__title">UMC Study Plan</h1>
+      </header>
+
+      <hr class="todo-app__divider" />
+
+      <form class="todo-app__form">
+        <input
+          type="text"
+          class="todo-app__input"
+          placeholder="스터디 계획을 작성해보세요!"
+        />
+      </form>
+
+      <div class="todo-app__lists">
+        <section class="todo-app__section">
+          <h2 class="todo-app__section-title">해야 할 일</h2>
+          <ul class="todo-app__list todo-app__list--todo"></ul>
+        </section>
+
+        <section class="todo-app__section">
+          <h2 class="todo-app__section-title">해낸 일</h2>
+          <ul class="todo-app__list todo-app__list--done"></ul>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const input = document.querySelector(".todo-app__input");
+      const todoList = document.querySelector(".todo-app__list--todo");
+      const doneList = document.querySelector(".todo-app__list--done");
+      const form = document.querySelector(".todo-app__form");
+
+      function createButton(label, className) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = label;
+        btn.className = className;
+        return btn;
+      }
+
+      function createTodoItem(text) {
+        const li = document.createElement("li");
+        li.className = "todo-item todo-item--todo";
+
+        const span = document.createElement("span");
+        span.className = "todo-item__text";
+        span.textContent = text;
+
+        const completeBtn = createButton("완료", "button");
+        completeBtn.addEventListener("click", () => completeTodo(li, text));
+
+        li.append(span, completeBtn);
+        return li;
+      }
+
+      function createDoneItem(text) {
+        const li = document.createElement("li");
+        li.className = "todo-item todo-item--done";
+
+        const span = document.createElement("span");
+        span.className = "todo-item__text";
+        span.textContent = text;
+
+        const deleteBtn = createButton("삭제", "button");
+        deleteBtn.addEventListener("click", () => deleteTodo(li));
+
+        li.append(span, deleteBtn);
+        return li;
+      }
+
+      function addTodo(text) {
+        const trimmed = text.trim();
+        if (!trimmed) return;
+        todoList.appendChild(createTodoItem(trimmed));
+        input.value = "";
+      }
+
+      function completeTodo(li, text) {
+        li.remove();
+        doneList.appendChild(createDoneItem(text));
+      }
+
+      function deleteTodo(li) {
+        li.remove();
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        addTodo(input.value);
+      });
+    </script>
+  </body>
+</html>

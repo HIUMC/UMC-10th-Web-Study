@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="container">
+            <header class="header">
+                <h1 class="header__title">TO DO</h1>
+            </header>
+            <div class="input-area">
+                <input type="text" class="input-area__input" id="todo-input" placeholder="할 일 입력" autocomplete="off"/>
+                <button class="input-area__button" id="add-button">할 일 추가</button>
+            </div>
+            <main class="main">
+                <section class="todo-section">
+                    <h2 class="section-title">할 일</h2>
+                    <ul class="todo-list" id="todo-list"></ul>
+                </section>
+                <section class="done-section">
+                    <h2 class="section-title">완료</h2>
+                    <ul class="todo-list" id="done-list"></ul>
+                </section>
+            </main>
+        </div>
+        <script type="module" src="./dist/script.js"></script>
+    </body>
+</html>
