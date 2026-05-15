@@ -67,8 +67,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const updateUser = (partial: Partial<ResponseMyInfo>) => {
+    setUser((prev) => (prev ? { ...prev, ...partial } : prev));
+  };
+
   return (
-    <AuthContext.Provider value={{ accessToken, refreshToken, user, login, logout, refreshUser }}>
+    <AuthContext.Provider value={{ accessToken, refreshToken, user, login, logout, refreshUser, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

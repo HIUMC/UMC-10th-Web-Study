@@ -8,6 +8,7 @@ export interface AuthContextType {
   login: (data: RequestSignInDto) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  updateUser: (partial: Partial<ResponseMyInfo>) => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -17,4 +18,5 @@ export const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   logout: async () => {},
   refreshUser: async () => {},
+  updateUser: () => {},
 });

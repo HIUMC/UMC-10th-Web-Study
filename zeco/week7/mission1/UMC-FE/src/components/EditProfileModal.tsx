@@ -4,7 +4,7 @@ import { patchMyInfo } from '../apis/auth';
 import { uploadImage } from '../apis/lp';
 import { useAuth } from '../context/useAuth';
 import { QUERY_KEY } from '../utils/constants/queryKeys';
-import type { ResponseMyInfo } from '../types/auth';
+import type { CommonResponse, ResponseMyInfo } from '../types/auth';
 
 interface EditProfileModalProps {
   currentProfile: ResponseMyInfo;
@@ -17,7 +17,7 @@ export default function EditProfileModal({
   onClose,
   onSuccess,
 }: EditProfileModalProps) {
-  const { refreshUser } = useAuth();
+  const { refreshUser, updateUser, user } = useAuth();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,18 +31,35 @@ export default function EditProfileModal({
 
   const mutation = useMutation({
     mutationFn: async () => {
-      // 1단계: 새 아바타 파일이 있으면 먼저 업로드 → URL 받기
       let avatarUrl: string | undefined;
       if (avatarFile) {
         avatarUrl = await uploadImage(avatarFile);
       }
-
-      // 2단계: 프로필 수정 (JSON body)
       return patchMyInfo({
         name: name.trim(),
         bio: bio.trim() || undefined,
         ...(avatarUrl ? { avatar: avatarUrl } : {}),
       });
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEY.MY_INFO] });
+
+      const previousMyInfo = queryClient.getQueryData<CommonResponse<ResponseMyInfo>>([QUERY_KEY.MY_INFO]);
+      const previousUser = user;
+
+      const optimisticName = name.trim();
+      const optimisticBio = bio.trim() || null;
+
+      // QueryCache 낙관적 업데이트 → MyPage 즉시 반영
+      queryClient.setQueryData<CommonResponse<ResponseMyInfo>>([QUERY_KEY.MY_INFO], (old) => {
+        if (!old) return old;
+        return { ...old, data: { ...old.data, name: optimisticName, bio: optimisticBio } };
+      });
+
+      // AuthContext 낙관적 업데이트 → Nav-Bar 즉시 반영
+      updateUser({ name: optimisticName, bio: optimisticBio });
+
+      return { previousMyInfo, previousUser };
     },
     onSuccess: async () => {
       await refreshUser();
@@ -50,7 +67,14 @@ export default function EditProfileModal({
       onSuccess();
       onClose();
     },
-    onError: () => {
+    onError: (_err, _vars, context) => {
+      // 낙관적 업데이트 롤백
+      if (context?.previousMyInfo !== undefined) {
+        queryClient.setQueryData([QUERY_KEY.MY_INFO], context.previousMyInfo);
+      }
+      if (context?.previousUser) {
+        updateUser(context.previousUser);
+      }
       setFormError('프로필 수정에 실패했습니다. 다시 시도해주세요.');
     },
   });

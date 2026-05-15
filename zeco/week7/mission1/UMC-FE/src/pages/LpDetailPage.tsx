@@ -10,9 +10,9 @@ import LpFormModal from '../components/LpFormModal';
 import { getHttpErrorMessage } from '../utils/error';
 import { getRelativeTime } from '../utils/time';
 import { ErrorState, LoadingState } from '../components/AsyncState';
-import { postComment, patchComment, deleteComment, deleteLp } from '../apis/lp';
+import { postComment, patchComment, deleteComment, deleteLp, postLike, deleteLike } from '../apis/lp';
 import { QUERY_KEY } from '../utils/constants/queryKeys';
-import type { Comment, CommentOrder } from '../types/lp';
+import type { Comment, CommentOrder, LpDetail } from '../types/lp';
 
 interface LpCommentItemProps {
   comment: Comment;
@@ -231,6 +231,38 @@ export default function LpDetailPage() {
     },
   });
 
+  const isLiked = lp != null && user != null &&
+    lp.likes.some((like) => Number(like.userId) === Number(user.id));
+
+  const likeMutation = useMutation({
+    mutationFn: () => (isLiked ? deleteLike(lpId) : postLike(lpId)),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEY.LP_DETAIL, lpId] });
+
+      const previousLp = queryClient.getQueryData<LpDetail>([QUERY_KEY.LP_DETAIL, lpId]);
+
+      queryClient.setQueryData<LpDetail>([QUERY_KEY.LP_DETAIL, lpId], (old) => {
+        if (!old || !user) return old;
+        return {
+          ...old,
+          likes: isLiked
+            ? old.likes.filter((l) => Number(l.userId) !== Number(user.id))
+            : [...old.likes, { id: -1, userId: user.id, lpId }],
+        };
+      });
+
+      return { previousLp };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousLp !== undefined) {
+        queryClient.setQueryData([QUERY_KEY.LP_DETAIL, lpId], context.previousLp);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LP_DETAIL, lpId] });
+    },
+  });
+
   if (!accessToken) {
     return (
       <AuthModal
@@ -375,8 +407,15 @@ export default function LpDetailPage() {
 
       {/* 좋아요 + 돌아가기 */}
       <div className="flex items-center justify-between pt-2">
-        <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-600 text-white text-sm hover:bg-gray-800 transition-colors">
-          <span>♥</span>
+        <button
+          onClick={() => likeMutation.mutate()}
+          disabled={likeMutation.isPending}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm transition-colors disabled:opacity-50
+            ${isLiked
+              ? 'border-red-500 text-red-500 hover:bg-red-950'
+              : 'border-gray-600 text-white hover:bg-gray-800'}`}
+        >
+          <span>{isLiked ? '♥' : '♡'}</span>
           <span>{lp.likes.length}</span>
         </button>
         <button
