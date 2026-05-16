@@ -7,6 +7,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { useAuth } from "../context/AuthContext";
 import { getMyInfo } from "../apis/auth";
 import { uploadImageToCloudinary } from "../utils/uploadImageToCloudinary";
+import useGetMyInfo from "../hooks/useGetMyInfo";
 
 export default function EditMyInfoPage() {
   const { register, handleSubmit, reset, watch } =
@@ -17,6 +18,8 @@ export default function EditMyInfoPage() {
   const [data, setData] = useState<ResponseMyInfoDto | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatar = watch("avatar");
+  const { accessToken } = useAuth();
+  const { data: myInfo } = useGetMyInfo(accessToken); // ✅ 캐시 존재 보장
 
   const onSubmit = (data: RequestPatchMyInfoDto) => {
     const payload = {
@@ -29,7 +32,6 @@ export default function EditMyInfoPage() {
       onSuccess: () => {
         alert("정보가 수정되었습니다!");
         navigate(-1);
-        setTimeout(() => window.location.reload(), 100);
       },
     });
   };

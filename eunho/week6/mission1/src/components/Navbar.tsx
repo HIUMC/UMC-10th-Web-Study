@@ -1,27 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Sidebar from "./Sidebar";
-import { useEffect, useState } from "react";
-import type { ResponseMyInfoDto } from "../types/auth";
-import { getMyInfo } from "../apis/auth";
+import useGetMyInfo from "../hooks/useGetMyInfo";
 
 export default function Navbar() {
   const { accessToken, logout } = useAuth();
-  const [data, setData] = useState<ResponseMyInfoDto | null>(null);
-  const navigate = useNavigate();
+  const { data: myInfo } = useGetMyInfo(accessToken);
 
-  useEffect(() => {
-    if (!accessToken) return;
-    const fetchData = async () => {
-      try {
-        const response = await getMyInfo();
-        setData(response);
-      } catch (err) {
-        console.error("getMyInfo 실패:", err);
-      }
-    };
-    fetchData();
-  }, [accessToken]);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
@@ -41,7 +27,7 @@ export default function Navbar() {
       </div>
       {accessToken ? (
         <div className="space-x-6 mr-5 flex justify-center items-center">
-          <div className="text-white">{data?.data.name}님 환영합니다</div>
+          <div className="text-white">{myInfo?.data.name}님 환영합니다</div>
           <button onClick={handleLogout} className="text-white">
             로그아웃
           </button>
