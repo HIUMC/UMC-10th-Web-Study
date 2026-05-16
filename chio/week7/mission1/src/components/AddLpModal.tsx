@@ -8,7 +8,7 @@ import {
 } from "react";
 import { X } from "lucide-react";
 import useCreateLp from "../hooks/queries/useCreateLp";
-import useUploadLpImage from "../hooks/queries/useUploadLpImage";
+import useUploadImage from "../hooks/queries/useUploadImage";
 import type { RequestCreateLpDto } from "../types/lps";
 
 interface AddLpModalProps {
@@ -18,9 +18,10 @@ interface AddLpModalProps {
 
 function AddLpModal({ isOpen, onClose }: AddLpModalProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const createLpPayloadRef = useRef<Omit<RequestCreateLpDto, "thumbnail"> | null>(
-    null,
-  );
+  const createLpPayloadRef = useRef<Omit<
+    RequestCreateLpDto,
+    "thumbnail"
+  > | null>(null);
   const [lpName, setLpName] = useState("");
   const [lpContent, setLpContent] = useState("");
   const [tagInput, setTagInput] = useState("");
@@ -53,7 +54,7 @@ function AddLpModal({ isOpen, onClose }: AddLpModalProps) {
     },
   });
 
-  const uploadLpImageMutation = useUploadLpImage({
+  const uploadImageMutation = useUploadImage({
     onSuccess: (uploadResponse) => {
       const createLpPayload = createLpPayloadRef.current;
 
@@ -72,7 +73,8 @@ function AddLpModal({ isOpen, onClose }: AddLpModalProps) {
     },
   });
 
-  const isSubmitting = uploadLpImageMutation.isPending || createLpMutation.isPending;
+  const isSubmitting =
+    uploadImageMutation.isPending || createLpMutation.isPending;
 
   useEffect(() => {
     if (!isOpen) {
@@ -150,12 +152,12 @@ function AddLpModal({ isOpen, onClose }: AddLpModalProps) {
     const content = lpContent.trim();
 
     if (!lpImage) {
-      setFormError("LP 사진을 선택해주세요.");
+      setFormError("LP 사진을 선택해주세요."); // 사진 없으면 업로드 안됨
       return;
     }
 
     if (!title || !content) {
-      setFormError("LP 이름과 내용을 입력해주세요.");
+      setFormError("LP 이름과 내용을 입력해주세요."); // 태그 필수 인가?
       return;
     }
 
@@ -166,7 +168,7 @@ function AddLpModal({ isOpen, onClose }: AddLpModalProps) {
       tags,
       published: true,
     };
-    uploadLpImageMutation.mutate(lpImage);
+    uploadImageMutation.mutate(lpImage);
   };
 
   return (

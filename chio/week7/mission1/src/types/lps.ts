@@ -56,13 +56,35 @@ export type RequestCreateLpDto = {
   published: boolean;
 };
 
-export type CreatedLp = Omit<Lp, "tags" | "likes">;
+export type RequestUpdateLpDto = {
+  title?: string;
+  content?: string;
+  thumbnail?: string;
+  tags?: string[];
+  published?: boolean;
+};
 
-export type ResponseUploadImageDto = CommonResponse<{
-  imageUrl: string;
-}>;
+export type RequestCreateCommentDto = {
+  content: string;
+};
+
+export type RequestUpdateCommentDto = {
+  content: string;
+};
+
+export type CreatedLp = Omit<Lp, "tags" | "likes">;
+export type UpdatedLp = Omit<Lp, "likes">;
 
 export type ResponseCreateLpDto = CommonResponse<CreatedLp>;
+export type ResponseUpdateLpDto = CommonResponse<UpdatedLp>;
+export type ResponseDeleteLpDto = CommonResponse<boolean>;
+export type ResponseLikeLpDto = CommonResponse<Likes>;
+export type ResponseUnlikeLpDto = CommonResponse<Likes>;
+export type ResponseCreateCommentDto = LpComment;
+export type ResponseUpdateCommentDto = CommonResponse<LpComment>;
+export type ResponseDeleteCommentDto = CommonResponse<{
+  message: string;
+}>;
 export type ResponseLpListDto = CursorBasedResponse<Lp[]>;
 export type ResponseLpDetailDto = CommonResponse<LpDetail>;
 export type ResponseLpCommentListDto = CursorBasedResponse<LpComment[]>;
