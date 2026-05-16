@@ -8,6 +8,8 @@ import type { RequestSigninDto } from "../types/auth";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { postLogout, postSignin } from "../apis/auth";
+import useLogin from "../hooks/mutations/useLogin";
+import useLogout from "../hooks/mutations/useLogout";
 
 interface AuthContextType {
   accessToken: string | null;
@@ -41,43 +43,26 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(
     getRefreshTokenFromStorage(),
   );
-  const setTokens = (newAccess: string, newRefresh: string) => {
-    setAccessToken(newAccess);
-    setRefreshToken(newRefresh);
-  };
+
+  const { mutateAsync: loginMutate } = useLogin();
 
   const login = async (signinData: RequestSigninDto) => {
     try {
-      const { data } = await postSignin(signinData);
-
-      if (data) {
-        const newAccessToken = data.accessToken;
-        const newRefreshToken = data.refreshToken;
-
-        setAccessTokenInStorage(newAccessToken);
-        setRefreshTokenInStorage(newRefreshToken);
-
-        setAccessToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
-        alert("로그인 성공");
-      }
+      const res = await loginMutate(signinData);
+      setAccessToken(res.data.accessToken);
+      setRefreshToken(res.data.refreshToken);
     } catch (error) {
       console.error("로그인 오류", error);
-      alert("로그인 실패");
     }
   };
 
+  const { mutateAsync: logoutMutate } = useLogout();
+
   const logout = async () => {
     try {
-      await postLogout();
-      removeAccessTokenFromStorage();
-      removeRefreshTokenFromStorage();
-
-      setAccessToken(null);
-      setRefreshToken(null);
+      logoutMutate();
     } catch (error) {
-      console.error("로그아웃 오류", error);
-      alert("로그아웃 실패");
+      console.error("로그아웃 실패", error);
     }
   };
 

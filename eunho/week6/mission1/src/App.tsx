@@ -19,6 +19,9 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import LpDetailPage from "./pages/LpDetailPage";
 import { GoogleLoginRedirectpage } from "./pages/GoogleLoginRedirectpage";
 import Comments from "./pages/Comments";
+import PostLpPage from "./pages/PostLpPage";
+import EditLpPage from "./pages/EditLpPage";
+import EditMyInfoPage from "./pages/EditMyInfoPage";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -51,16 +54,16 @@ const publicRoutes: RouteObject[] = [
         element: <GoogleLoginRedirectpage />,
       },
       {
-        path: "/v1/lps/:lpId",
-        element: <LpDetailPage />,
-      },
-      {
         path: "v1/lps/:lpId",
         element: <LpDetailPage />,
         children: [
           {
             path: "comments",
             element: <Comments />,
+          },
+          {
+            path: "edit",
+            element: <EditLpPage />,
           },
         ],
       },
@@ -77,6 +80,16 @@ const protectedRoutes: RouteObject[] = [
       {
         path: "my",
         element: <MyPage />,
+        children: [
+          {
+            path: "postLps",
+            element: <PostLpPage />,
+          },
+          {
+            path: "edit",
+            element: <EditMyInfoPage />,
+          },
+        ],
       },
     ],
   },

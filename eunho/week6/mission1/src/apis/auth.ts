@@ -1,10 +1,13 @@
 import type {
+  RequestPatchMyInfoDto,
   RequestSigninDto,
   RequestSignupDto,
   ResponseMyInfoDto,
   ResponseSigninDto,
   ResponseSignupDto,
 } from "../types/auth";
+import type { ResponseCommentDto } from "../types/comment";
+import type { RequestPatchLpDto } from "../types/lp";
 import { axiosInstance } from "./axios";
 
 export const postSignup = async (
@@ -37,16 +40,29 @@ export const postLogout = async () => {
 export const getMyInfo = async (): Promise<ResponseMyInfoDto> => {
   let token = localStorage.getItem("accessToken");
   if (token) {
-    token = token.replace(/"/g, ""); // 따옴표 제거
+    token = token.replace(/"/g, "");
   }
-
-  console.log("👉 최종 보낼 토큰:", token);
 
   const { data } = await axiosInstance.get("/v1/users/me", {
     headers: {
-      Authorization: `Bearer ${token}`, // 여기 반드시 추가!
+      Authorization: `Bearer ${token}`,
     },
   });
 
   return data;
+};
+
+export const patchMyInfo = async (body: {
+  name?: string;
+  bio?: string;
+  avatar?: string | null;
+}) => {
+  const { data } = await axiosInstance.patch("/v1/users", body, {
+    headers: { "Content-Type": "application/json" },
+  });
+  return data;
+};
+
+export const deleteUser = async () => {
+  return axiosInstance.delete("/v1/users");
 };

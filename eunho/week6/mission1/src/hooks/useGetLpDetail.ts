@@ -7,8 +7,9 @@ export function useGetLpDetail() {
 
   return useQuery({
     queryKey: ["lp", lpId],
-    queryFn: () => getLpDetail(Number(lpId)),
+    queryFn: () => getLpDetail({ lpId: Number(lpId) }),
     enabled: !!lpId,
     select: (data) => data.data,
+    staleTime: 0,
   });
 }
