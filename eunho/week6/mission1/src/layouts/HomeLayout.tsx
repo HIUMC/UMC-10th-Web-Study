@@ -11,12 +11,6 @@ function HomeLayout() {
         <Outlet />
       </main>
       <Footer />
-      <button
-        onClick={() => navigate("#")}
-        className="text-2xl flex justify-center items-center cursor-pointer fixed bottom-6 right-6 bg-blue-600 text-white size-14 rounded-full"
-      >
-        <span className="mb-1">+</span>
-      </button>
     </div>
   );
 }

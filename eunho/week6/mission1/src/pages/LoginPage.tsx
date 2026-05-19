@@ -7,24 +7,18 @@ import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, accessToken } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const LoginPage = () => {
-    const { login, accessToken } = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
+  useEffect(() => {
+    if (accessToken) {
+      const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
+      localStorage.removeItem("redirectAfterLogin");
 
-    useEffect(() => {
-      if (accessToken) {
-        const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
-        localStorage.removeItem("redirectAfterLogin");
-
-        navigate(redirectPath, { replace: true });
-      }
-    }, [accessToken, navigate, location.state]);
-  };
+      navigate(redirectPath, { replace: true });
+    }
+  }, [accessToken, navigate, location.state]);
 
   const { values, errors, touched, getInputProps } =
     useForm<userSigninInformation>({

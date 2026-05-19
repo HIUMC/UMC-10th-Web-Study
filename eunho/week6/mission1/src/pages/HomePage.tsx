@@ -5,10 +5,12 @@ import { PAGINATION_ORDER } from "../enums/common";
 import { useInView } from "react-intersection-observer";
 import type { Lp } from "../types/lp";
 import LpcardSkeletonList from "../components/LpcardSkeletonList";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
+  const navigate = useNavigate();
 
   // const { data, isPending, isError } = useGetLpList({
   //   search,
@@ -45,6 +47,10 @@ function HomePage() {
     return <div className="mt-20 text-2xl">Error.</div>;
   }
 
+  {
+    isPending && <LpcardSkeletonList count={12} />;
+  }
+  console.log(lps);
   return (
     <>
       <div className="mt-10 p-4">
@@ -81,6 +87,12 @@ function HomePage() {
         </div>
         <div ref={ref} className="h-6" />
       </div>
+      <button
+        onClick={() => navigate("/my/postLps")}
+        className="text-2xl flex justify-center items-center cursor-pointer fixed bottom-6 right-6 bg-blue-600 text-white size-14 rounded-full"
+      >
+        <span className="mb-1">+</span>
+      </button>
     </>
   );
 }
