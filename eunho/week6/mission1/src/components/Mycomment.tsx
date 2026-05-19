@@ -44,6 +44,9 @@ export default function MyComment({
   };
 
   const handleDeleteSubmit = () => {
+    const ok = window.confirm("댓글을 삭제하시겠어요?");
+    if (!ok) return; // 취소 누르면 삭제 중단
+
     deleteComment(id, {
       onSuccess: () => {
         refetchComments?.();

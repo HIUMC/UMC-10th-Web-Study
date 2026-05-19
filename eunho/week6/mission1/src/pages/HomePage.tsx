@@ -6,11 +6,13 @@ import { useInView } from "react-intersection-observer";
 import type { Lp } from "../types/lp";
 import LpcardSkeletonList from "../components/LpcardSkeletonList";
 import { useNavigate } from "react-router-dom";
+import useDebounce from "../hooks/useDebounce";
 
 function HomePage() {
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const navigate = useNavigate();
+  const debouncedValue = useDebounce(search, 500);
 
   // const { data, isPending, isError } = useGetLpList({
   //   search,
@@ -24,7 +26,7 @@ function HomePage() {
     isError,
     hasNextPage,
     fetchNextPage,
-  } = useGetInfiniteLpList(30, search, order as PAGINATION_ORDER);
+  } = useGetInfiniteLpList(30, debouncedValue, order as PAGINATION_ORDER);
 
   // ref, inView
   // ref : 특정한 HTML 요소를 감시할 수 있음
@@ -54,23 +56,31 @@ function HomePage() {
   return (
     <>
       <div className="mt-10 p-4">
-        <div className="flex justify-end mb-4">
-          <button
-            className={`w-20 h-8 border border-white rounded-sm ${
-              order === "asc" ? "bg-white text-black" : "bg-black text-white"
-            }`}
-            onClick={() => setOrder("asc")}
-          >
-            오래된순
-          </button>
-          <button
-            className={`w-20 h-8 border border-white rounded-sm ${
-              order === "desc" ? "bg-white text-black" : "bg-black text-white"
-            }`}
-            onClick={() => setOrder("desc")}
-          >
-            최신순
-          </button>
+        <div className="flex justify-between mb-4">
+          <input
+            className={"border p-4 rounded-sm"}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="검색어를 입력하세요"
+          />
+          <div className="justify-end">
+            <button
+              className={`w-20 h-8 border border-white rounded-sm ${
+                order === "asc" ? "bg-white text-black" : "bg-black text-white"
+              }`}
+              onClick={() => setOrder("asc")}
+            >
+              오래된순
+            </button>
+            <button
+              className={`w-20 h-8 border border-white rounded-sm ${
+                order === "desc" ? "bg-white text-black" : "bg-black text-white"
+              }`}
+              onClick={() => setOrder("desc")}
+            >
+              최신순
+            </button>
+          </div>
         </div>
         {/* <input value={search} onChange={(e) => setSearch(e.target.value)} /> */}
         <div className="mt-10 p-4">

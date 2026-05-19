@@ -1,31 +1,22 @@
-import type { ResponseMyInfoDto } from "./auth";
-import type { CursorBasedResponse } from "./common";
+import type { PAGINATION_ORDER } from "../enums/common";
 
-export type ResponseCommentDto = {
-  id: number;
-  content: string;
-  lpId: number;
-  authorId: number;
-  createdAt: string;
-  updatedAt: string;
-  author: ResponseMyInfoDto;
-};
-
-export type ResponseCommentListDto = {
+export type CommonResponse<T> = {
   status: boolean;
-  message: string;
   statusCode: number;
-  data: {
-    data: ResponseCommentDto[];
-    hasNext: boolean;
-    nextCursor?: number;
-  };
+  message: string;
+  data: T;
 };
 
-export type RequestPostCommentDto = {
-  content: string;
-  name?: string;
-};
-export type RequestCommentDto = {
-  lpId: number;
+export type CursorBasedResponse<T> = CommonResponse<{
+  data: T[];
+  nextCursor: number | null;
+  hasNext: boolean;
+}>;
+
+export type PaginationDto = {
+  cursor?: number;
+  limit?: number;
+  search?: string;
+  order?: PAGINATION_ORDER;
+  sort?: string;
 };
