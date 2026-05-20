@@ -36,31 +36,23 @@ export type UpdateLpPayload = {
 
 const LOCAL_LPS_KEY = 'week7-local-lps';
 const LOCAL_COMMENTS_KEY = 'week7-local-comments';
+const TYPESCRIPT_TAG = '\uD0C0\uC785\uC2A4\uD06C\uB9BD\uD2B8';
 
-const DEMO_LPS: LpCard[] = [
-  {
-    id: 10001,
-    title: '타입스크립트로 만든 첫 LP',
-    body: 'Debounce와 TanStack Query를 함께 연습하기 좋은 타입스크립트 검색 예시입니다.',
-    thumbnail: 'https://picsum.photos/seed/typescript-lp-1/520/320',
-    uploadDate: '2025-04-17',
-    likes: 42,
-    tags: ['typescript', '타입스크립트', 'react'],
+const DEMO_LPS: LpCard[] = Array.from({ length: 14 }, (_, index) => {
+  const id = 10001 + index;
+
+  return {
+    id,
+    title: `TypeScript mission LP ${index + 1}`,
+    body: 'A demo LP for practicing Debounce, Throttle, and TanStack Query infinite search.',
+    thumbnail: `https://picsum.photos/seed/typescript-lp-${index + 1}/520/320`,
+    uploadDate: `2025-04-${String(10 + index).padStart(2, '0')}`,
+    likes: 30 + index,
+    tags: ['typescript', TYPESCRIPT_TAG, 'react', index % 2 === 0 ? 'debounce' : 'throttle'],
     author: 'demo',
     likedByMe: false,
-  },
-  {
-    id: 10002,
-    title: 'TypeScript 검색 미션',
-    body: '사용자가 타입스크립트를 입력하는 동안에는 요청을 보내지 않고, 입력이 멈춘 뒤 검색합니다.',
-    thumbnail: 'https://picsum.photos/seed/typescript-lp-2/520/320',
-    uploadDate: '2025-04-18',
-    likes: 36,
-    tags: ['typescript', 'debounce', 'query'],
-    author: 'demo',
-    likedByMe: false,
-  },
-];
+  };
+});
 
 function readStorage<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
@@ -111,7 +103,7 @@ export async function fetchLpList(sort: 'latest' | 'oldest', pageParam: number =
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=${limit}`);
 
   if (!res.ok) {
-    throw new Error('LP 목록을 불러오지 못했습니다.');
+    throw new Error('Failed to load LP list.');
   }
 
   const posts = (await res.json()) as Array<{ id: number; title: string; body: string }>;
@@ -143,21 +135,18 @@ export async function searchLpList(sort: 'latest' | 'oldest', query: string, cur
   );
 
   if (!res.ok) {
-    throw new Error('LP 검색 결과를 불러오지 못했습니다.');
+    throw new Error('Failed to load LP search results.');
   }
 
   const posts = (await res.json()) as Array<{ id: number; title: string; body: string }>;
-  const localMatches =
-    cursor === 0
-      ? [...demoLps(), ...localLps()].filter((item) => {
-          const lowerQuery = trimmedQuery.toLowerCase();
-          return (
-            item.title.toLowerCase().includes(lowerQuery) ||
-            item.body.toLowerCase().includes(lowerQuery) ||
-            item.tags.some((tag) => tag.toLowerCase().includes(lowerQuery))
-          );
-        })
-      : [];
+  const lowerQuery = trimmedQuery.toLowerCase();
+  const localMatches = [...demoLps(), ...localLps()].filter(
+    (item) =>
+      item.title.toLowerCase().includes(lowerQuery) ||
+      item.body.toLowerCase().includes(lowerQuery) ||
+      item.tags.some((tag) => tag.toLowerCase().includes(lowerQuery))
+  );
+  const localPage = localMatches.slice(cursor, cursor + limit);
   const remoteItems: LpCard[] = posts.map((post) => ({
     id: post.id,
     title: post.title,
@@ -169,13 +158,13 @@ export async function searchLpList(sort: 'latest' | 'oldest', query: string, cur
     author: 'jsonplaceholder',
   }));
 
-  const sortedItems = [...localMatches, ...remoteItems].sort((a, b) =>
+  const sortedItems = [...localPage, ...remoteItems].sort((a, b) =>
     sort === 'latest' ? b.id - a.id : a.id - b.id
   );
 
   return {
     data: sortedItems,
-    nextCursor: posts.length === limit ? cursor + limit : undefined,
+    nextCursor: localMatches.length > cursor + limit || posts.length === limit ? cursor + limit : undefined,
   };
 }
 
@@ -188,7 +177,7 @@ export async function fetchLpDetail(lpid: number) {
 
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${lpid}`);
   if (!res.ok) {
-    throw new Error('LP 상세 정보를 불러오지 못했습니다.');
+    throw new Error('Failed to load LP detail.');
   }
 
   const post = (await res.json()) as { id: number; title: string; body: string };
@@ -219,7 +208,7 @@ export async function createLpPost(payload: CreateLpPayload) {
   });
 
   if (!res.ok) {
-    throw new Error('LP를 등록하지 못했습니다.');
+    throw new Error('Failed to create LP.');
   }
 
   const created = (await res.json()) as { id?: number };
@@ -256,7 +245,7 @@ export async function updateLpPost(payload: UpdateLpPayload) {
   });
 
   if (!res.ok) {
-    throw new Error('LP를 수정하지 못했습니다.');
+    throw new Error('Failed to update LP.');
   }
 
   const items = localLps();
@@ -274,7 +263,7 @@ export async function deleteLpPost(id: number) {
   });
 
   if (!res.ok) {
-    throw new Error('LP를 삭제하지 못했습니다.');
+    throw new Error('Failed to delete LP.');
   }
 
   saveLocalLps(localLps().filter((item) => item.id !== id));
@@ -299,7 +288,7 @@ export async function fetchLpComments(lpid: number, order: 'oldest' | 'latest', 
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${lpid}/comments?_start=${start}&_limit=${limit}`);
 
   if (!res.ok) {
-    throw new Error('댓글을 불러오지 못했습니다.');
+    throw new Error('Failed to load comments.');
   }
 
   const comments = (await res.json()) as Array<{
@@ -336,7 +325,7 @@ export async function createComment(lpid: number, body: string, nickname: string
   });
 
   if (!res.ok) {
-    throw new Error('댓글을 작성하지 못했습니다.');
+    throw new Error('Failed to create comment.');
   }
 
   const created = (await res.json()) as { id?: number };
@@ -363,7 +352,7 @@ export async function updateComment(lpid: number, commentId: number, body: strin
   });
 
   if (!res.ok) {
-    throw new Error('댓글을 수정하지 못했습니다.');
+    throw new Error('Failed to update comment.');
   }
 
   const stores = localComments();
@@ -380,7 +369,7 @@ export async function deleteComment(lpid: number, commentId: number) {
   });
 
   if (!res.ok) {
-    throw new Error('댓글을 삭제하지 못했습니다.');
+    throw new Error('Failed to delete comment.');
   }
 
   const stores = localComments();

@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchLpList } from '../hooks/api';
 import { useDebounce } from '../hooks/useDebounce';
+import { useThrottle } from '../hooks/useThrottle';
 import SkeletonCard from '../components/SkeletonCard';
 
 export default function LPListPage() {
   const [sort, setSort] = useState<'latest' | 'oldest'>('latest');
   const [query, setQuery] = useState('');
+  const [bottomSignal, setBottomSignal] = useState(0);
   const debouncedQuery = useDebounce(query, 300);
+  const throttledBottomSignal = useThrottle(bottomSignal, 1000);
   const trimmedDebouncedQuery = debouncedQuery.trim();
   const navigate = useNavigate();
   const observerRef = useRef<HTMLDivElement>(null);
@@ -26,8 +29,8 @@ export default function LPListPage() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
+        if (entries[0].isIntersecting) {
+          setBottomSignal(Date.now());
         }
       },
       { threshold: 1 }
@@ -38,7 +41,16 @@ export default function LPListPage() {
     }
 
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, []);
+
+  useEffect(() => {
+    if (!trimmedDebouncedQuery || throttledBottomSignal === 0 || !hasNextPage || isFetchingNextPage) {
+      return;
+    }
+
+    console.log('throttled infinite scroll fetch', new Date().toLocaleTimeString());
+    fetchNextPage();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, throttledBottomSignal, trimmedDebouncedQuery]);
 
   const allItems = data?.pages.flatMap((page) => page.data) || [];
   const hasSearchQuery = trimmedDebouncedQuery.length > 0;
@@ -47,32 +59,32 @@ export default function LPListPage() {
     <section className="page-section">
       <div className="page-heading">
         <div>
-          <h1>LP 목록</h1>
-          <p>검색어 입력이 멈춘 뒤에만 API 요청이 실행됩니다.</p>
+          <h1>LP List</h1>
+          <p>Search requests wait for debounce, and infinite scroll fetches are throttled.</p>
         </div>
         <div className="sort-group">
           <button type="button" className={sort === 'latest' ? 'active' : ''} onClick={() => setSort('latest')}>
-            최신순
+            Latest
           </button>
           <button type="button" className={sort === 'oldest' ? 'active' : ''} onClick={() => setSort('oldest')}>
-            오래된순
+            Oldest
           </button>
         </div>
       </div>
 
       <label className="search-field">
-        <span>LP 검색</span>
+        <span>LP Search</span>
         <input
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="제목, 내용, 작성자 이름으로 검색"
+          placeholder="Try typing typescript"
         />
       </label>
 
       {!hasSearchQuery && (
         <div className="info-block">
-          <p>검색어를 입력하면 300ms 뒤에 검색 요청이 실행됩니다.</p>
+          <p>Type a search term. The API request starts 300ms after typing stops.</p>
         </div>
       )}
 
@@ -89,7 +101,7 @@ export default function LPListPage() {
               </div>
               <p>{item.body.slice(0, 80)}...</p>
               <div className="card-footer">
-                <span>좋아요 {item.likes}</span>
+                <span>Likes {item.likes}</span>
                 <span>{item.author}</span>
               </div>
             </div>
@@ -98,7 +110,7 @@ export default function LPListPage() {
 
         {hasSearchQuery && !isLoading && allItems.length === 0 && (
           <div className="info-block">
-            <p>검색 결과가 없습니다.</p>
+            <p>No results found.</p>
           </div>
         )}
 
@@ -109,9 +121,9 @@ export default function LPListPage() {
 
       {isError && (
         <div className="error-block">
-          <p>{(error as Error)?.message || '데이터를 불러오지 못했습니다.'}</p>
+          <p>{(error as Error)?.message || 'Failed to load data.'}</p>
           <button type="button" onClick={() => window.location.reload()}>
-            다시 시도
+            Retry
           </button>
         </div>
       )}
