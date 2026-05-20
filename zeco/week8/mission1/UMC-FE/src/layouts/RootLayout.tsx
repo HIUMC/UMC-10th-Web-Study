@@ -3,13 +3,14 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '../context/useAuth';
 import { deleteAccount } from '../apis/auth';
+import { useSidebar } from '../hooks/useSidebar';
 import LpFormModal from '../components/LpFormModal';
 import ConfirmModal from '../components/ConfirmModal';
 
 function RootLayout() {
   const navigate = useNavigate();
   const { accessToken, user, logout } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isOpen: sidebarOpen, close: closeSidebar, toggle: toggleSidebar } = useSidebar();
   const [isCreateLpModalOpen, setIsCreateLpModalOpen] = useState(false);
   const [isDeleteAccountConfirmOpen, setIsDeleteAccountConfirmOpen] = useState(false);
   const [deleteAccountError, setDeleteAccountError] = useState<string | null>(null);
@@ -44,8 +45,8 @@ function RootLayout() {
       <header className="flex items-center justify-between px-4 py-3 bg-black border-b border-gray-800 shrink-0 z-10">
         {/* 햄버거 버튼 (모바일) */}
         <button
-          className="lg:hidden mr-3 text-white"
-          onClick={() => setSidebarOpen((prev) => !prev)}
+          className="mr-3 text-white"
+          onClick={toggleSidebar}
           aria-label="메뉴 열기"
         >
           <svg
@@ -118,24 +119,24 @@ function RootLayout() {
         {/* 모바일 오버레이 */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/50 lg:hidden z-20"
-            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 bg-black/50 z-20"
+            onClick={closeSidebar}
           />
         )}
 
         {/* 사이드바 */}
         <aside
           className={`
-            fixed lg:static top-0 left-0 h-full w-56 bg-gray-900 border-r border-gray-800
+            fixed top-0 left-0 h-full w-56 bg-gray-900 border-r border-gray-800
             flex flex-col pt-4 z-30 transition-transform duration-300
-            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}
         >
           <nav className="flex flex-col gap-1 px-3 flex-1">
             <NavLink
               to="/"
               end
-              onClick={() => setSidebarOpen(false)}
+              onClick={closeSidebar}
               className={({ isActive }) =>
                 `flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors
                 ${isActive ? 'bg-yellow-500 text-white' : 'text-gray-300 hover:bg-gray-800'}`
@@ -146,7 +147,7 @@ function RootLayout() {
             {accessToken && (
               <NavLink
                 to="/my"
-                onClick={() => setSidebarOpen(false)}
+                onClick={closeSidebar}
                 className={({ isActive }) =>
                   `flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors
                   ${isActive ? 'bg-yellow-500 text-white' : 'text-gray-300 hover:bg-gray-800'}`
@@ -162,7 +163,7 @@ function RootLayout() {
             <div className="px-3 pb-4 border-t border-gray-800 pt-3">
               <button
                 onClick={() => {
-                  setSidebarOpen(false);
+                  closeSidebar();
                   setIsDeleteAccountConfirmOpen(true);
                 }}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-gray-800 w-full transition-colors"
