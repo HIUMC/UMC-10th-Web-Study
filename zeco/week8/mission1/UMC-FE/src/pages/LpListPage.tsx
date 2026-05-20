@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetLpListInfinite } from '../hooks/useGetLpListInfinite';
 import { useDebounce } from '../hooks/useDebounce';
+import { useThrottle } from '../hooks/useThrottle';
 import LpCard from '../components/LpCard';
 import type { LpOrder } from '../types/lp';
 import { getHttpErrorMessage } from '../utils/error';
@@ -11,11 +12,11 @@ export default function LpListPage() {
   const navigate = useNavigate();
   const [order, setOrder] = useState<LpOrder>('desc');
   const [searchInput, setSearchInput] = useState('');
+  const [intersectCount, setIntersectCount] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const debouncedQuery = useDebounce(searchInput, 300);
   const trimmedQuery = debouncedQuery.trim();
-  // 공백만 입력된 경우 요청 차단, 빈 문자열이거나 실제 검색어가 있을 때만 허용
   const queryEnabled = debouncedQuery === '' || trimmedQuery.length > 0;
 
   const {
@@ -31,14 +32,23 @@ export default function LpListPage() {
 
   const lps = data?.pages.flatMap((page) => page.data) ?? [];
 
+  // 스크롤 감지 횟수를 1초에 한 번만 통과시킴
+  const throttledCount = useThrottle(intersectCount, 3000);
+
+  useEffect(() => {
+    if (throttledCount > 0 && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [throttledCount]);
+
   useEffect(() => {
     const target = bottomRef.current;
     if (!target) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
+        if (entry.isIntersecting) {
+          setIntersectCount((c) => c + 1);
         }
       },
       { rootMargin: '160px 0px', threshold: 0.1 }
@@ -46,7 +56,7 @@ export default function LpListPage() {
 
     observer.observe(target);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, []);
 
   return (
     <div className="p-6">
