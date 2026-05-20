@@ -11,40 +11,53 @@ type SidebarProps = {
 
 export function Sidebar({ isOpen, onClose, user, onWithdraw, isWithdrawing }: SidebarProps) {
   return (
-    <aside className={`app-sidebar ${isOpen ? 'open' : ''}`}>
-      <div className="sidebar-scroll">
-        <div className="sidebar-header">
-          <strong>LP 메뉴</strong>
-          <button type="button" className="close-sidebar" onClick={onClose} aria-label="사이드바 닫기">
-            X
-          </button>
+    <>
+      <button
+        type="button"
+        className={`sidebar-backdrop ${isOpen ? 'open' : ''}`}
+        onClick={onClose}
+        aria-label="Close sidebar"
+        tabIndex={isOpen ? 0 : -1}
+      />
+      <aside
+        id="app-sidebar"
+        className={`app-sidebar ${isOpen ? 'open' : ''}`}
+        aria-hidden={!isOpen}
+        aria-label="LP menu"
+      >
+        <div className="sidebar-scroll">
+          <div className="sidebar-header">
+            <strong>LP Menu</strong>
+            <button type="button" className="close-sidebar" onClick={onClose} aria-label="Close sidebar">
+              X
+            </button>
+          </div>
+          <nav className="sidebar-nav">
+            <Link to="/v1/lps" onClick={onClose}>
+              LP List
+            </Link>
+            {user ? (
+              <>
+                <Link to="/mypage" onClick={onClose}>
+                  My Page
+                </Link>
+                <button type="button" className="sidebar-danger" onClick={onWithdraw} disabled={isWithdrawing}>
+                  Withdraw
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" onClick={onClose}>
+                  Login
+                </Link>
+                <Link to="/signup" onClick={onClose}>
+                  Sign up
+                </Link>
+              </>
+            )}
+          </nav>
         </div>
-        <nav className="sidebar-nav">
-          <Link to="/v1/lps" onClick={onClose}>
-            LP 목록
-          </Link>
-          {user ? (
-            <>
-              <Link to="/mypage" onClick={onClose}>
-                내 정보
-              </Link>
-              <button type="button" className="sidebar-danger" onClick={onWithdraw} disabled={isWithdrawing}>
-                탈퇴하기
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" onClick={onClose}>
-                로그인
-              </Link>
-              <Link to="/signup" onClick={onClose}>
-                회원가입
-              </Link>
-            </>
-          )}
-        </nav>
-      </div>
-      {isOpen && <button type="button" className="sidebar-backdrop" onClick={onClose} aria-label="사이드바 닫기" />}
-    </aside>
+      </aside>
+    </>
   );
 }

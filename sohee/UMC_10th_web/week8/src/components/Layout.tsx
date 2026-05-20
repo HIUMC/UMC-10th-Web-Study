@@ -6,6 +6,7 @@ import { Sidebar } from './Sidebar';
 import { FloatingActionButton } from './FloatingActionButton';
 import { LpPostModal } from './LpPostModal';
 import { useAuth } from '../hooks/useAuth';
+import { useSidebar } from '../hooks/useSidebar';
 
 function fakeAuthRequest() {
   return new Promise<void>((resolve) => {
@@ -14,7 +15,7 @@ function fakeAuthRequest() {
 }
 
 export function Layout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebar = useSidebar();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
   const auth = useAuth();
@@ -36,7 +37,7 @@ export function Layout() {
       auth.withdraw();
       queryClient.clear();
       setWithdrawModalOpen(false);
-      setSidebarOpen(false);
+      sidebar.close();
       navigate('/login', { replace: true });
     },
   });
@@ -53,14 +54,15 @@ export function Layout() {
     <div className="app-shell">
       <Header
         user={auth.user}
-        onBurgerClick={() => setSidebarOpen((prev) => !prev)}
+        isSidebarOpen={sidebar.isOpen}
+        onBurgerClick={sidebar.toggle}
         onLogout={() => logoutMutation.mutate()}
         isLoggingOut={logoutMutation.isPending}
       />
       <div className="app-content">
         <Sidebar
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
+          isOpen={sidebar.isOpen}
+          onClose={sidebar.close}
           user={auth.user}
           onWithdraw={() => setWithdrawModalOpen(true)}
           isWithdrawing={withdrawMutation.isPending}
@@ -83,11 +85,11 @@ export function Layout() {
             aria-labelledby="withdraw-title"
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <h2 id="withdraw-title">정말 탈퇴하시겠어요?</h2>
-            <p>계정 정보가 삭제되고 로그인 페이지로 이동합니다.</p>
+            <h2 id="withdraw-title">Withdraw account?</h2>
+            <p>Your account information will be removed and you will move to the login page.</p>
             <div className="confirm-actions">
               <button type="button" className="ghost-button" onClick={() => setWithdrawModalOpen(false)}>
-                아니오
+                Cancel
               </button>
               <button
                 type="button"
@@ -95,7 +97,7 @@ export function Layout() {
                 onClick={() => withdrawMutation.mutate()}
                 disabled={withdrawMutation.isPending}
               >
-                예
+                Confirm
               </button>
             </div>
           </section>

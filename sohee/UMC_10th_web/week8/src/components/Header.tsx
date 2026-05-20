@@ -3,15 +3,23 @@ import { AuthUser } from '../hooks/useAuth';
 
 type HeaderProps = {
   user: AuthUser | null;
+  isSidebarOpen: boolean;
   onBurgerClick: () => void;
   onLogout: () => void;
   isLoggingOut: boolean;
 };
 
-export function Header({ user, onBurgerClick, onLogout, isLoggingOut }: HeaderProps) {
+export function Header({ user, isSidebarOpen, onBurgerClick, onLogout, isLoggingOut }: HeaderProps) {
   return (
     <header className="app-header">
-      <button className="burger-button" type="button" onClick={onBurgerClick} aria-label="메뉴 열기">
+      <button
+        className="burger-button"
+        type="button"
+        onClick={onBurgerClick}
+        aria-label={isSidebarOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={isSidebarOpen}
+        aria-controls="app-sidebar"
+      >
         <svg width="24" height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
           <path
             fill="none"
@@ -31,18 +39,18 @@ export function Header({ user, onBurgerClick, onLogout, isLoggingOut }: HeaderPr
       <div className="header-actions">
         {user ? (
           <>
-            <span>{user.nickname}님, 반갑습니다</span>
+            <span>{user.nickname}님, 반갑습니다.</span>
             <button className="text-button" type="button" onClick={onLogout} disabled={isLoggingOut}>
-              로그아웃
+              Logout
             </button>
           </>
         ) : (
           <>
             <Link to="/login" className="text-button">
-              로그인
+              Login
             </Link>
             <Link to="/signup" className="text-button">
-              회원가입
+              Sign up
             </Link>
           </>
         )}
