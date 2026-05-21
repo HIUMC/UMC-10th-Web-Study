@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   return (
     <>
       <div
-        className={`absolute inset-0 z-30 bg-black/50 transition-opacity duration-300 ease-in-out md:hidden ${
+        className={`absolute inset-0 z-30 bg-black/50 transition-opacity duration-300 ease-in-out ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={onClose}
@@ -36,7 +36,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       {accessToken && (
         <aside
           id="app-sidebar"
-          className={`absolute top-0 left-0 h-full w-64 bg-white/80 dark:bg-[#1e1e24] border-r border-slate-200 dark:border-gray-800 z-40 p-5 shadow-xl backdrop-blur transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:shrink-0 md:shadow-none ${
+          className={`absolute top-0 left-0 h-full w-64 bg-white/80 dark:bg-[#1e1e24] border-r border-slate-200 dark:border-gray-800 z-40 p-5 shadow-xl backdrop-blur transition-transform duration-300 ease-in-out ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
