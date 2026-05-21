@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import { ErrorState, LoadingState } from "../components/FetchState";
@@ -8,12 +8,14 @@ import LpCard from "../components/LpCard/LpCard";
 import LpCardSkeletonList from "../components/LpCard/LpCardSkeletonList";
 import CreateLpModal from "../components/CreateLpModal";
 import { useAuth } from "../context/AuthContext";
+import useThrottle from "../hooks/useThrottle";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { accessToken } = useAuth();
   const [order, setOrder] = useState<"desc" | "asc">("desc");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [scrollTop, setScrollTop] = useState(0);
 
   const {
     data: lpList,
@@ -26,12 +28,40 @@ const HomePage = () => {
   } = useGetInfiniteLpList(10, "", order);
 
   const { ref, inView } = useInView({ threshold: 0 });
+  const throttledScrollTop = useThrottle(scrollTop, 1000);
+  const lastFetchScrollTopRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (inView && !isFetching && hasNextPage) {
+    const scrollContainer = document.querySelector("main");
+    if (!scrollContainer) return;
+
+    const handleScroll = () => {
+      setScrollTop(scrollContainer.scrollTop);
+    };
+
+    scrollContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      scrollContainer.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (
+      inView &&
+      !isFetching &&
+      hasNextPage &&
+      lastFetchScrollTopRef.current !== throttledScrollTop
+    ) {
+      lastFetchScrollTopRef.current = throttledScrollTop;
+
       fetchNextPage();
     }
-  }, [inView, isFetching, hasNextPage, fetchNextPage]);
+  }, [throttledScrollTop, inView, isFetching, hasNextPage, fetchNextPage]);
+
+  useEffect(() => {
+    lastFetchScrollTopRef.current = null;
+  }, [order]);
 
   const handleOpenCreateModal = () => {
     if (!accessToken) {
