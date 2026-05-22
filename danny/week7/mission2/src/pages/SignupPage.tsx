@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import {  type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postSignup } from "../apis/auth";
 import MailIcon from "../icons/MailIcon";
 import EyeClosedIcon from "../icons/EyeClosedIcon";
 import EyeOpenIcon from "../icons/EyeOpenIcon";
+import { useForm } from "../hooks/useForm";
 
 const schema = z
   .object({
