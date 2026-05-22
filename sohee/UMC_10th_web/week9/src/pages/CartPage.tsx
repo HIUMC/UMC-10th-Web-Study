@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { calculateTotals, clearCart, decrease, increase, removeItem } from '../store/cartSlice';
+import { calculateTotals, decrease, increase, removeItem } from '../features/cart/cartSlice';
+import { openModal } from '../features/modal/modalSlice';
+import { Modal } from '../components/Modal';
 import { AppDispatch, RootState } from '../store';
 import { CartItem } from '../constants/cartItems';
 
@@ -85,7 +87,7 @@ export default function CartPage() {
               <button
                 className="justify-self-center rounded border border-black px-6 py-4 text-base font-medium text-black transition hover:bg-slate-900 hover:text-white"
                 type="button"
-                onClick={() => dispatch(clearCart())}
+                onClick={() => dispatch(openModal())}
               >
                 {'\uC804\uCCB4 \uC0AD\uC81C'}
               </button>
@@ -106,6 +108,7 @@ export default function CartPage() {
           </section>
         )}
       </main>
+      <Modal />
     </div>
   );
 }

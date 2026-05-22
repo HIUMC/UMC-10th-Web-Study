@@ -17,3 +17,6 @@ Re-optimizing dependencies because vite config has changed
 [2mPM 8:59:18[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
 [2mPM 9:01:12[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
 [2mPM 9:21:25[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:34:23[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/store/index.ts[22m
+[2mPM 9:34:23[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:34:33[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
