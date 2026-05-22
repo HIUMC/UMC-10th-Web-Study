@@ -1,13 +1,10 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { calculateTotals, decrease, increase, removeItem } from '../features/cart/cartSlice';
-import { openModal } from '../features/modal/modalSlice';
 import { Modal } from '../components/Modal';
-import { AppDispatch, RootState } from '../store';
 import { CartItem } from '../constants/cartItems';
+import { usePlaylistStore } from '../store/usePlaylistStore';
 
 function CartRow({ item }: { item: CartItem }) {
-  const dispatch = useDispatch<AppDispatch>();
+  const { decrease, increase, removeItem } = usePlaylistStore();
 
   return (
     <article className="grid grid-cols-[126px_1fr_166px] items-center gap-[26px] border-b border-slate-200 px-[26px] py-[26px] max-[900px]:grid-cols-[80px_1fr_104px] max-[900px]:gap-4 max-[900px]:px-5 max-[900px]:py-4">
@@ -30,7 +27,7 @@ function CartRow({ item }: { item: CartItem }) {
           className="h-[52px] w-[52px] bg-slate-300 transition hover:bg-slate-400 max-[900px]:h-8 max-[900px]:w-8"
           type="button"
           aria-label={`${item.title} decrease amount`}
-          onClick={() => dispatch(decrease(item.id))}
+          onClick={() => decrease(item.id)}
         >
           -
         </button>
@@ -41,13 +38,13 @@ function CartRow({ item }: { item: CartItem }) {
           className="h-[52px] w-[52px] bg-slate-300 transition hover:bg-slate-400 max-[900px]:h-8 max-[900px]:w-8"
           type="button"
           aria-label={`${item.title} increase amount`}
-          onClick={() => dispatch(increase(item.id))}
+          onClick={() => increase(item.id)}
         >
           +
         </button>
       </div>
 
-      <button className="sr-only" type="button" onClick={() => dispatch(removeItem(item.id))}>
+      <button className="sr-only" type="button" onClick={() => removeItem(item.id)}>
         remove item
       </button>
     </article>
@@ -55,12 +52,11 @@ function CartRow({ item }: { item: CartItem }) {
 }
 
 export default function CartPage() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, amount, total } = useSelector((state: RootState) => state.cart);
+  const { cartItems, amount, total, calculateTotals, openModal } = usePlaylistStore();
 
   useEffect(() => {
-    dispatch(calculateTotals());
-  }, [cartItems, dispatch]);
+    calculateTotals();
+  }, [cartItems, calculateTotals]);
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
@@ -87,7 +83,7 @@ export default function CartPage() {
               <button
                 className="justify-self-center rounded border border-black px-6 py-4 text-base font-medium text-black transition hover:bg-slate-900 hover:text-white"
                 type="button"
-                onClick={() => dispatch(openModal())}
+                onClick={openModal}
               >
                 {'\uC804\uCCB4 \uC0AD\uC81C'}
               </button>

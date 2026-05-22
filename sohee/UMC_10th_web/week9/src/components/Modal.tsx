@@ -1,20 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { clearCart } from '../features/cart/cartSlice';
-import { closeModal } from '../features/modal/modalSlice';
-import { AppDispatch, RootState } from '../store';
+import { usePlaylistStore } from '../store/usePlaylistStore';
 
 export function Modal() {
-  const dispatch = useDispatch<AppDispatch>();
-  const isOpen = useSelector((state: RootState) => state.modal.isOpen);
+  const { closeModal, confirmClearCart, isOpen } = usePlaylistStore();
 
   if (!isOpen) {
     return null;
   }
-
-  const handleConfirm = () => {
-    dispatch(clearCart());
-    dispatch(closeModal());
-  };
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 px-5">
@@ -32,14 +23,14 @@ export function Modal() {
           <button
             className="rounded border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-100"
             type="button"
-            onClick={() => dispatch(closeModal())}
+            onClick={closeModal}
           >
             {'\uC544\uB2C8\uC694'}
           </button>
           <button
             className="rounded bg-slate-800 px-6 py-3 font-semibold text-white transition hover:bg-slate-950"
             type="button"
-            onClick={handleConfirm}
+            onClick={confirmClearCart}
           >
             {'\uB124'}
           </button>

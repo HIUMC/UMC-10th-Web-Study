@@ -1,1 +1,13 @@
 [2mPM 9:34:23[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/store/cartSlice.ts (resolved id: C:/UMC/sohee/UMC_10th_web/week9/src/store/cartSlice.ts) in C:/UMC/sohee/UMC_10th_web/week9/src/pages/CartPage.tsx. Does the file exist?
+[2mPM 9:43:10[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/features/cart/cartSlice.ts (resolved id: C:/UMC/sohee/UMC_10th_web/week9/src/features/cart/cartSlice.ts) in C:/UMC/sohee/UMC_10th_web/week9/src/pages/CartPage.tsx. Does the file exist?
+[2mPM 9:43:10[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/features/cart/cartSlice.ts (resolved id: C:/UMC/sohee/UMC_10th_web/week9/src/features/cart/cartSlice.ts) in C:/UMC/sohee/UMC_10th_web/week9/src/pages/CartPage.tsx. Does the file exist?
+[2mPM 9:43:10[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/features/modal/modalSlice.ts (resolved id: C:/UMC/sohee/UMC_10th_web/week9/src/features/modal/modalSlice.ts) in C:/UMC/sohee/UMC_10th_web/week9/src/pages/CartPage.tsx. Does the file exist?
+[2mPM 9:43:10[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/features/modal/modalSlice.ts (resolved id: C:/UMC/sohee/UMC_10th_web/week9/src/features/modal/modalSlice.ts) in C:/UMC/sohee/UMC_10th_web/week9/src/pages/CartPage.tsx. Does the file exist?
+[2mPM 9:44:40[22m [31m[1m[vite][22m[39m [31merror while updating dependencies:
+Error: ENOENT: no such file or directory, open 'C:\UMC\sohee\UMC_10th_web\week9\node_modules\react-redux\dist\react-redux.mjs'
+    at async open (node:internal/fs/promises:637:25)
+    at async Object.readFile (node:internal/fs/promises:1269:14)
+    at async extractExportsData (file:///C:/UMC/sohee/UMC_10th_web/week9/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51156:24)
+    at async file:///C:/UMC/sohee/UMC_10th_web/week9/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:50904:27
+    at async Promise.all (index 8)
+    at async prepareEsbuildOptimizerRun (file:///C:/UMC/sohee/UMC_10th_web/week9/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:50901:3)[39m
