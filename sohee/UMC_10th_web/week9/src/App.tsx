@@ -10,6 +10,7 @@ import SignupPage from './pages/SignupPage';
 import CreatePage from './pages/CreatePage';
 import MyPage from './pages/MyPage';
 import UseReducerCompany from './pages/UseReducerCompany';
+import CartPage from './pages/CartPage';
 import './App.css';
 
 const queryClient = new QueryClient({
@@ -27,7 +28,8 @@ const App = () => {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route index element={<UseReducerCompany />} />
+            <Route index element={<CartPage />} />
+            <Route path="cart" element={<CartPage />} />
             <Route path="card-maker" element={<UseReducerCompany />} />
             <Route path="reducer-company" element={<UseReducerCompany />} />
             <Route element={<Layout />}>
