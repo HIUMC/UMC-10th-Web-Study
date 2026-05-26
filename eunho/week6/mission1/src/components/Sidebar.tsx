@@ -1,112 +1,81 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { X } from "lucide-react";
-import useDeleteUser from "../hooks/mutations/useDeleteUser";
-import ConfirmModal from "./confirmModal";
+import { useEffect } from "react";
+import { FaSearch } from "react-icons/fa";
+import { IoPersonCircleOutline } from "react-icons/io5";
 
-export default function Sidebar() {
-  const [open, setOpen] = useState(false);
-  const { accessToken } = useAuth();
-  const [showConfirm, setShowConfirm] = useState(false);
-  const { mutate: deleteUserMutate, isPending } = useDeleteUser();
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
+export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 768 && open) {
-        setOpen(false);
-      }
-      if (window.innerWidth > 768 && !open) {
-        setOpen(true);
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
       }
     };
+    document.addEventListener("keydown", handleEscape);
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [open]);
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
 
-  const handleDelete = () => {
-    setShowConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    deleteUserMutate();
-    setShowConfirm(false);
-  };
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isOpen]);
 
   return (
-    <>
-      <button
-        className="p-2 rounded-md cursor-pointer text-white "
-        onClick={() => setOpen(true)}
+    <div
+      className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 z-70 ${
+        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+      onClick={onClose}
+    >
+      <aside
+        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        role="dialog"
       >
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 48 48"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="4"
-            d="M7.95 11.95h32m-32 12h32m-32 12h32"
-          />
-        </svg>
-      </button>
-
-      <div
-        className={` fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-lg transform transition-transform duration-300 z-50
-          ${open ? "translate-x-0" : "-translate-x-full"}`}
-      >
-        <div className="relative flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            메뉴
-          </h2>
-          <button onClick={() => setOpen(false)}>
-            <X className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-300" />
-          </button>
+        <div className="flex flex-col h-full">
+          <div className="p-6 border-b border-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900">돌려돌려 LP판</h2>
+          </div>
+          <nav className="flex-1 overflow-y-auto p-4">
+            <ul className="space-y-2">
+              <li>
+                <a
+                  href="#search"
+                  className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover :bg-gray-100 transition-colors"
+                >
+                  <span>
+                    <FaSearch />
+                  </span>
+                  <span className="ml-3 font-medium">찾기</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#my"
+                  className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover :bg-gray-100 transition-colors"
+                >
+                  <span>
+                    <IoPersonCircleOutline />
+                  </span>
+                  <span className="ml-3 font-medium">마이페이지</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
-
-        <nav className="flex flex-col p-4 space-y-3">
-          {accessToken && (
-            <Link
-              to="/my"
-              className="text-gray-700 dark:text-gray-300 hover:text-white hover:text-lg"
-              onClick={() => setOpen(false)}
-            >
-              마이페이지
-            </Link>
-          )}
-
-          <Link
-            to="/search"
-            className="text-gray-700 dark:text-gray-300 hover:text-white hover:text-lg"
-            onClick={() => setOpen(false)}
-          >
-            검색
-          </Link>
-          {accessToken && (
-            <button
-              onClick={handleDelete}
-              className="cursor-pointer absolute bottom-10 left-7 w-50 text-white bg-blue-700 h-10 rounded-md text-lg"
-            >
-              탈퇴하기
-            </button>
-          )}
-        </nav>
-      </div>
-
-      {open && <div className="fixed inset-0" onClick={() => setOpen(false)} />}
-
-      <ConfirmModal
-        isOpen={showConfirm}
-        message="정말 탈퇴하시겠습니까"
-        onConfirm={confirmDelete}
-        onCancel={() => setShowConfirm(false)}
-      />
-    </>
+      </aside>
+    </div>
   );
-}
+};
+
+// fixed inset-0 => 화면 전체를 덮음
