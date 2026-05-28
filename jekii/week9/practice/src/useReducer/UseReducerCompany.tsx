@@ -15,19 +15,18 @@ interface IAction {
 function reducer(state: IState, action: IAction) {
   const { type, payload } = action;
   switch (type) {
-    case "CHANGE_DEPARTMENT":
+    case "CHANGE_DEPARTMENT": {
       const newDepartment = payload;
       const hasError = newDepartment !== "카드메이커";
 
-      {
-        return {
+      return {
           ...state,
           department: hasError ? state.department : newDepartment,
           error: hasError
             ? "거부권 행사 가능, 카드메이커만 입력 가능합니다."
             : null,
         };
-      }
+    }
     default:
       return state;
   }
