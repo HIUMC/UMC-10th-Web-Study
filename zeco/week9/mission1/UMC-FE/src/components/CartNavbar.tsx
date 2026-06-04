@@ -1,9 +1,9 @@
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { usePlaylistStore } from '../redux/usePlaylistStore';
 import styles from './CartNavbar.module.css';
 
 export default function CartNavbar() {
-  const { amount } = useSelector((state: any) => state.cart);
+  const { amount } = usePlaylistStore();
 
   return (
     <nav className={styles.navbar}>

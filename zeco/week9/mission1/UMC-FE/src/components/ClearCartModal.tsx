@@ -1,20 +1,17 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { closeModal } from '../redux/modalSlice';
-import { clearCart } from '../redux/cartSlice';
+import { usePlaylistStore } from '../redux/usePlaylistStore';
 
 export default function ClearCartModal() {
-  const dispatch = useDispatch();
-  const isOpen = useSelector((state: any) => state.modal.isOpen);
+  const { isModalOpen, clearCart, closeModal } = usePlaylistStore();
 
-  if (!isOpen) return null;
+  if (!isModalOpen) return null;
 
   const handleConfirm = () => {
-    dispatch(clearCart());
-    dispatch(closeModal());
+    clearCart();
+    closeModal();
   };
 
   const handleCancel = () => {
-    dispatch(closeModal());
+    closeModal();
   };
 
   return (

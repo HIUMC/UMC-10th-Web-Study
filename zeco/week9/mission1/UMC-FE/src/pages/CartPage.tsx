@@ -1,13 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { increase, decrease, removeItem } from '../redux/cartSlice';
-import { openModal } from '../redux/modalSlice';
+import { usePlaylistStore } from '../redux/usePlaylistStore';
 import CartNavbar from '../components/CartNavbar';
 import ClearCartModal from '../components/ClearCartModal';
 import styles from './CartPage.module.css';
 
 export default function CartPage() {
-  const dispatch = useDispatch();
-  const { cartItems } = useSelector((state: any) => state.cart);
+  const { cartItems, increase, decrease, removeItem, openModal } = usePlaylistStore();
 
   return (
     <div className={styles.container}>
@@ -20,7 +17,7 @@ export default function CartPage() {
           </div>
         ) : (
           <div className={styles.itemsList}>
-            {cartItems.map((item: any) => (
+            {cartItems.map((item) => (
               <div key={item.id} className={styles.item}>
                 {/* 왼쪽: 이미지 + 정보 */}
                 <div className={styles.leftSection}>
@@ -44,14 +41,14 @@ export default function CartPage() {
                 {/* 오른쪽: 수량 조절 */}
                 <div className={styles.quantityControl}>
                   <button
-                    onClick={() => dispatch(decrease(item.id))}
+                    onClick={() => decrease(item.id)}
                     className={styles.quantityBtn}
                   >
                     −
                   </button>
                   <span className={styles.quantityText}>{item.amount}</span>
                   <button
-                    onClick={() => dispatch(increase(item.id))}
+                    onClick={() => increase(item.id)}
                     className={styles.quantityBtn}
                   >
                     +
@@ -67,7 +64,7 @@ export default function CartPage() {
       {cartItems.length > 0 && (
         <div className={styles.footer}>
           <button
-            onClick={() => dispatch(openModal())}
+            onClick={() => openModal()}
             className={styles.clearBtn}
           >
             전체 삭제
