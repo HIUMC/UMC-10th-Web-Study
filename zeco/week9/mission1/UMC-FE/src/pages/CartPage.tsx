@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { increase, decrease, removeItem, clearCart } from '../redux/cartSlice';
+import { increase, decrease, removeItem } from '../redux/cartSlice';
+import { openModal } from '../redux/modalSlice';
 import CartNavbar from '../components/CartNavbar';
+import ClearCartModal from '../components/ClearCartModal';
 import styles from './CartPage.module.css';
 
 export default function CartPage() {
@@ -65,13 +67,16 @@ export default function CartPage() {
       {cartItems.length > 0 && (
         <div className={styles.footer}>
           <button
-            onClick={() => dispatch(clearCart())}
+            onClick={() => dispatch(openModal())}
             className={styles.clearBtn}
           >
             전체 삭제
           </button>
         </div>
       )}
+
+      {/* Modal */}
+      <ClearCartModal />
     </div>
   );
 }
