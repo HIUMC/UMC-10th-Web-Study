@@ -8,9 +8,10 @@ const LIMIT = 12;
 interface UseGetLpListInfiniteParams {
   order: LpOrder;
   search?: string;
+  enabled?: boolean;
 }
 
-export function useGetLpListInfinite({ order, search = '' }: UseGetLpListInfiniteParams) {
+export function useGetLpListInfinite({ order, search = '', enabled = true }: UseGetLpListInfiniteParams) {
   return useInfiniteQuery({
     queryKey: [QUERY_KEY.LP_LIST, 'infinite', order, search],
     queryFn: ({ pageParam }) =>
@@ -25,5 +26,6 @@ export function useGetLpListInfinite({ order, search = '' }: UseGetLpListInfinit
       lastPage.hasNext ? (lastPage.nextCursor ?? undefined) : undefined,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    enabled,
   });
 }
