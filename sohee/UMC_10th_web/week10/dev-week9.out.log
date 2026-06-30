@@ -1,0 +1,28 @@
+
+> use-query-practice@1.0.0 dev
+> vite --host 127.0.0.1 --port 5173
+
+Re-optimizing dependencies because vite config has changed
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m601[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5173[22m/[39m
+[2mPM 8:53:32[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/main.tsx[22m
+[2mPM 8:53:33[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2mPM 8:53:33[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2mPM 8:54:16[22m [36m[1m[vite][22m[39m [32m✨ new dependencies optimized: [33mreact-redux, @reduxjs/toolkit[32m[39m
+[2mPM 8:54:16[22m [36m[1m[vite][22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2mPM 8:57:26[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 8:57:26[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 8:59:18[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:01:12[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:21:25[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:34:23[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/store/index.ts[22m
+[2mPM 9:34:23[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:34:33[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:43:09[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/main.tsx[22m
+[2mPM 9:43:10[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/store/index.ts[22m
+[2mPM 9:43:10[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx, /src/components/Modal.tsx[22m
+[2mPM 9:43:10[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx, /src/components/Modal.tsx[22m
+[2mPM 9:43:32[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CartPage.tsx[22m
+[2mPM 9:43:32[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Modal.tsx[22m
